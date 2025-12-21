@@ -139,9 +139,14 @@ function decreaseEditText(){
 function search(topUrlStr, urlPrefixStr, urlSuffixStr = "", escapeWord = false){
 	var txt = document.editForm.editTextarea.value;
 	var winName = document.editForm.searchNewTab.checked ? "_blank" : "_top";
-	// 空ならトップページを開いて終了。
+	var makeLink = document.editForm.searchMakeLinks.checked;
+	// 空ならトップページ。
 	if(txt.length <= 0){
-		window.open(topUrlStr, winName);
+		if(makeLink){
+			document.getElementById('outputLabel').innerHTML = '<br><a href="' + topUrlStr + '" target="' + winName + '">' + topUrlStr + '</a>';
+		}else{
+			window.open(topUrlStr, winName);
+		}
 		return;
 	}
 	// 使用する行だけにする。
@@ -153,7 +158,6 @@ function search(topUrlStr, urlPrefixStr, urlSuffixStr = "", escapeWord = false){
 	// 検索語が複数の場合は常に新規タブ。
 	if(wordArray.length > 1){ winName = "_blank"; }
 	// 開くorリンク作成。
-	var makeLink = document.editForm.searchMakeLinks.checked;
 	var linkHtmlStr = "";
 	var urlHtmlStr = "";
 	for(var i=0; i<wordArray.length; i++){
@@ -677,10 +681,11 @@ function sortCharacters(){
 -->
 <br>
 <font color="#708090" style="font-family:monospace;font-size:70%;">
-	<p>ver.7.4</p>
+	<p>ver.8</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
+	8		テキストが空でリンク作成がオンならトップページのリンクを作成。
 	7		「リンク作成」にリンクなしのURLも追加。Google画像URLを更新。Yahoo!ニュースをGoogle検索を追加。
 	6		編集系ボタンをテキストエリアの上に。
 	5		ペーストボタンを追加。
