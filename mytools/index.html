@@ -165,7 +165,7 @@ function search(topUrlStr, urlPrefixStr, urlSuffixStr = "", escapeWord = false){
 			window.open(urlStr,winName);
 		}
 	}
-	if(makeLink){ document.getElementById('outputLabel').innerHTML = linkHtmlStr + '<br>' + urlHtmlStr + '<br><br>'; }
+	if(makeLink){ document.getElementById('outputLabel').innerHTML = linkHtmlStr + '<br>' + urlHtmlStr + '<br>'; }
 }
 /*==================================================================================================
 		解析処理
@@ -675,6 +675,7 @@ function sortCharacters(){
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		バージョン情報
 -->
+<br>
 <font color="#708090" style="font-family:monospace;font-size:70%;">
 	<p>ver.7.4</p>
 	<p>クエリの仕様: text=入力テキスト</p>
