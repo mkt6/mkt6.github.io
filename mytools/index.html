@@ -60,13 +60,7 @@ function _onload(){
 		}
 	}
 	// フォーカスをtextareaに。
-	if(isMac){
-		document.editForm.editTextarea.focus();
-	}else{//iOS
-		setTimeout(()=>{
-			document.editForm.clearButton.click();
-		},1000);
-	}
+	document.editForm.editTextarea.focus();
 }
 </script>
 
