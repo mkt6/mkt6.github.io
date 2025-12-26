@@ -43,6 +43,18 @@ function shortenString(inString){
 	}
 	return newStr;
 }
+// 空行を除いても複数行か。
+function isMultiLineString(inString){
+	const lineArr = inString.split("\n");
+	var lineCount = 0;
+	for(let i=0; i<inString.length; i++){
+		if(lineArr[i].length>0){
+			lineCount++;
+			if(lineCount>=2){ return true; }
+		}
+	}
+	return false;
+}
 function _onload(){
 	const isMac = (navigator.maxTouchPoints <= 0);
 	// 表示内容の調整。
@@ -60,7 +72,7 @@ function _onload(){
 	}else{//iOS
 		document.editForm.editTextarea.rows = 5;
 		// より狭くしないとスクロールバーが被る。
-		document.editForm.editTextarea.style.width = "94%";
+		document.editForm.editTextarea.style.width = '94%';
 	}
 	// クエリ解析。
 	const queryArr = document.URL.split('?').pop().split('&');
@@ -79,6 +91,10 @@ function _onload(){
 		document.editForm.editTextarea.value = txtVal;
 		// タイトルにtextを含める。
 		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
+		// iOSでtextが複数行の場合、リンク作成をオンに。
+		if(!isMac && isMultiLineString(txtVal)){
+			document.editForm.searchMakeLinks.checked = true;
+		}
 	}
 	// フォーカスをtextareaに。
 	document.editForm.editTextarea.focus();
@@ -715,11 +731,11 @@ function sortCharacters(){
 -->
 <br>
 <font color="#708090" style="font-family:monospace;font-size:70%;">
-	<p>ver.9</p>
+	<p>ver.9.1</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
-	9		textクエリがあればタイトルに含める。
+	9		textクエリがあればタイトルに含める。iOSでtextが複数行の場合、リンク作成をオンに。
 	8		テキストが空でリンク作成がオンならトップページのリンクを作成。
 	7		「リンク作成」にリンクなしのURLも追加。Google画像URLを更新。Yahoo!ニュースをGoogle検索を追加。
 	6		編集系ボタンをテキストエリアの上に。
