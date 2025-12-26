@@ -159,18 +159,29 @@ function search(topUrlStr, urlPrefixStr, urlSuffixStr = "", escapeWord = false){
 	// 検索語が複数の場合は常に新規タブ。
 	if(wordArray.length > 1){ winName = "_blank"; }
 	// 開くorリンク作成。
-	var linkHtmlStr = "";
-	var urlHtmlStr = "";
+	var linkHtmlStr = '<span id="outputLabelLinkPart">';
+	var urlHtmlStr = '<span id="outputLabelURLPart">';
 	for(var i=0; i<wordArray.length; i++){
 		var urlStr = urlPrefixStr + (escapeWord ? escape(wordArray[i]) : encodeURIComponent(wordArray[i])) + urlSuffixStr;
 		if(makeLink){
-			linkHtmlStr += '<br><a href="' + urlStr + '" target="' + winName + '">' + wordArray[i] + '</a>';
-			urlHtmlStr += '<br>' + urlStr;
+			linkHtmlStr += '<a href="' + urlStr + '" target="' + winName + '">' + wordArray[i] + '</a><br>';
+			urlHtmlStr += urlStr + '<br>';
 		}else{
 			window.open(urlStr,winName);
 		}
 	}
-	if(makeLink){ document.getElementById('outputLabel').innerHTML = linkHtmlStr + '<br>' + urlHtmlStr + '<br>'; }
+	if(makeLink){
+		linkHtmlStr += '</span>';
+		urlHtmlStr += '</span>';
+		document.getElementById('outputLabel').innerHTML = '<br>' + linkHtmlStr + '<br>' + urlHtmlStr;
+		// outputLabelURLPartを選択。
+		const urlPart = document.getElementById('outputLabelURLPart');
+		const selection = window.getSelection();
+		const range = document.createRange();
+		range.selectNodeContents(urlPart);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
 }
 /*==================================================================================================
 		解析処理
@@ -682,7 +693,7 @@ function sortCharacters(){
 -->
 <br>
 <font color="#708090" style="font-family:monospace;font-size:70%;">
-	<p>ver.8.6</p>
+	<p>ver.8.7</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
