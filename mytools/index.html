@@ -24,8 +24,28 @@
 </head>
 
 <script type="text/javascript">
+// 引数の文字列を、空白文字と改行を最小限にした1行にする。
+function shortenString(inString){
+	var newStr = '';
+	const spaces = ' \t　\n\r';
+	var wasSpace = false;
+	for(let i=0; i<inString.length; i++){
+		const ch = inString.charAt(i);
+		if(spaces.includes(ch)){
+			wasSpace = true;
+		}else{
+			if(wasSpace && newStr.length>0){
+				newStr += ' ';
+			}
+			newStr += ch;
+			wasSpace = false;
+		}
+	}
+	return newStr;
+}
 function _onload(){
 	const isMac = (navigator.maxTouchPoints <= 0);
+	// 表示内容の調整。
 	if(isMac){
 		document.editForm.editTextarea.rows = 20;
 		// コピー/選択系ボタンは要らないので非表示。
@@ -42,22 +62,23 @@ function _onload(){
 		// より狭くしないとスクロールバーが被る。
 		document.editForm.editTextarea.style.width = "94%";
 	}
-	// textクエリ指定があれば入れる。
-	var queryFullStr = document.URL.split('?').pop();
-	if(queryFullStr.length <= 0){
-		return;
-	}
-	var queryArr = queryFullStr.split('&');
-	for(i=0; i < queryArr.length; i++){
-		var queryStr = queryArr[i];
-		var kvArr = queryStr.split('=');
-		
-		var keyStr = kvArr[0];
-		var valueStr = decodeURIComponent(kvArr[1]);
-		
-		if(keyStr == "text"){
-			document.editForm.editTextarea.value = valueStr;
+	// クエリ解析。
+	const queryArr = document.URL.split('?').pop().split('&');
+	var txtVal = null;
+	for(let i=0; i<queryArr.length; i++){
+		const kvArr = queryArr[i].split('=');
+		if(kvArr.length<2){ continue; }
+		const keyStr = kvArr[0].toLowerCase();
+		const valStr = decodeURIComponent(kvArr[1]);
+		if(keyStr=='text'){
+			txtVal = valStr;
 		}
+	}
+	// textクエリ指定があれば入れる。
+	if(txtVal){
+		document.editForm.editTextarea.value = txtVal;
+		// タイトルにtextを含める。
+		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
 	}
 	// フォーカスをtextareaに。
 	document.editForm.editTextarea.focus();
@@ -694,10 +715,11 @@ function sortCharacters(){
 -->
 <br>
 <font color="#708090" style="font-family:monospace;font-size:70%;">
-	<p>ver.8.9</p>
+	<p>ver.9</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
+	9		textクエリがあればタイトルに含める。
 	8		テキストが空でリンク作成がオンならトップページのリンクを作成。
 	7		「リンク作成」にリンクなしのURLも追加。Google画像URLを更新。Yahoo!ニュースをGoogle検索を追加。
 	6		編集系ボタンをテキストエリアの上に。
