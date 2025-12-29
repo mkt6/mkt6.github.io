@@ -11,11 +11,12 @@
 	<link rel="apple-touch-icon" href="favicon.png"><!--一応書いておく。-->
 	<style type="text/css">
 	._body {
-		font-family: sans-serif;
-		font-size: 100%;
+		font-family: sans-serif;/*やらないとiOSのSafariで明朝体になる。*/
+		/*font-size: 100%;*//*現状不要*/
 	}
 	._button {
-		font-size: 100%;
+		/*font-family: sans-serif;*//*やるとMacのFirefoxでが化ける。*/
+		font-size: 100%;/*やらないとiOSのSafari/MacのFirefox共にちょっと小さいかな…*/
 	}
 	._checkbox {
 		font-size: 70%;
@@ -732,7 +733,7 @@ function sortCharacters(){
 		バージョン情報
 -->
 <br>
-<font color="#708090" style="font-family:monospace;font-size:70%;">
+<font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
 	<p>ver.9.1</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
