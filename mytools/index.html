@@ -18,13 +18,21 @@
 		/*font-family: sans-serif;*//*やるとMacのFirefoxでが化ける。*/
 		font-size: 100%;/*やらないとiOSのSafari/MacのFirefox共にちょっと小さいかな…*/
 	}
-	._checkbox {
+	._settings {
 		font-size: 70%;
 	}
 	</style>
 </head>
 
 <script type="text/javascript">
+// 自分自身(このページ)を引数のクエリでopen。
+function openSelf(inText = null){
+	var urlStr = document.URL.split('?').shift();
+	if(inText){
+		urlStr = urlStr + '?text=' + encodeURIComponent(inText);
+	}
+	window.open(urlStr,'_top');
+}
 // 引数の文字列を、空白文字と改行を最小限にした1行にする。
 function shortenString(inString){
 	var newStr = '';
@@ -92,9 +100,9 @@ function _onload(){
 		document.editForm.editTextarea.value = txtVal;
 		// タイトルにtextを含める。
 		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
-		// iOSでtextが複数行の場合、リンク作成をオンに。
+		// iOSでtextが複数行の場合、「URLで置き換え」に。
 		if(!isMac && isMultiLineString(txtVal)){
-			document.editForm.searchMakeLinks.checked = true;
+			document.editForm.operation.value = 'makeURL';
 		}
 	}
 	// フォーカスをtextareaに。
@@ -176,16 +184,21 @@ function decreaseEditText(){
 /*--------------------------------------------------
 	検索
 */
-function search(topUrlStr, urlPrefixStr, urlSuffixStr = "", escapeWord = false){
-	var txt = document.editForm.editTextarea.value;
-	var winName = document.editForm.searchNewTab.checked ? "_blank" : "_top";
-	var makeLink = document.editForm.searchMakeLinks.checked;
+function search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = false){
+	const txt = document.editForm.editTextarea.value;
+	var winName = document.editForm.searchNewTab.checked ? '_blank' : '_top';
+	const operation = document.editForm.operation.value;
+	const isOpen = operation=='open';
+	const isMakeURL = isOpen? false : operation=='makeURL';
+	const isMakeLink = (isOpen || isMakeURL)? false : operation=='makeLink';
 	// 空ならトップページ。
 	if(txt.length <= 0){
-		if(makeLink){
-			document.getElementById('outputLabel').innerHTML = '<br><a href="' + topUrlStr + '" target="' + winName + '">' + topUrlStr + '</a>';
-		}else{
+		if(isOpen){
 			window.open(topUrlStr, winName);
+		}else if(isMakeURL){
+			openSelf(topUrlStr);
+		}else if(isMakeLink){
+			document.getElementById('outputLabel').innerHTML = '<br><a href="' + topUrlStr + '" target="' + winName + '">' + topUrlStr + '</a>';
 		}
 		return;
 	}
@@ -198,28 +211,22 @@ function search(topUrlStr, urlPrefixStr, urlSuffixStr = "", escapeWord = false){
 	// 検索語が複数の場合は常に新規タブ。
 	if(wordArray.length > 1){ winName = "_blank"; }
 	// 開くorリンク作成。
-	var linkHtmlStr = '<span id="outputLabelLinkPart">';
-	var urlHtmlStr = '<span id="outputLabelURLPart">';
+	var linkHtmlStr = '';
+	var urlTxtStr = '';
 	for(var i=0; i<wordArray.length; i++){
 		var urlStr = urlPrefixStr + (escapeWord ? escape(wordArray[i]) : encodeURIComponent(wordArray[i])) + urlSuffixStr;
-		if(makeLink){
-			linkHtmlStr += '<a href="' + urlStr + '" target="' + winName + '">' + wordArray[i] + '</a><br>';
-			urlHtmlStr += urlStr + '<br>';
-		}else{
+		if(isOpen){
 			window.open(urlStr,winName);
+		}else if(isMakeURL){
+			urlTxtStr += urlStr + '\n';
+		}else if(isMakeLink){
+			linkHtmlStr += '<br><a href="' + urlStr + '" target="' + winName + '">' + wordArray[i] + '</a>';
 		}
 	}
-	if(makeLink){
-		linkHtmlStr += '</span>';
-		urlHtmlStr += '</span>';
-		document.getElementById('outputLabel').innerHTML = '<br>' + linkHtmlStr + '<br>' + urlHtmlStr;
-		// outputLabelURLPartを選択。
-		const urlPart = document.getElementById('outputLabelURLPart');
-		const selection = window.getSelection();
-		const range = document.createRange();
-		range.selectNodeContents(urlPart);
-		selection.removeAllRanges();
-		selection.addRange(range);
+	if(isMakeURL){
+		openSelf(urlTxtStr);
+	}else if(isMakeLink){
+		document.getElementById('outputLabel').innerHTML = linkHtmlStr;
 	}
 }
 /*==================================================================================================
@@ -530,8 +537,12 @@ function sortCharacters(){
 		検索
 -->
 <br>
-<label class="_checkbox"><input class="_body" type="checkbox" name="searchNewTab" tabindex="2">1行でも新規タブ</label>　
-<label class="_checkbox"><input class="_body" type="checkbox" name="searchMakeLinks" tabindex="2">リンク作成</label>
+<label class="_settings"><input class="_settings" type="checkbox" name="searchNewTab" tabindex="2">1行でも新規タブ</label>　
+<select class="_settings" name="operation" tabindex="2">
+	<option value="open">開く</option>
+	<option value="makeURL">URL作成</option>
+	<option value="makeLink">リンク作成</option>
+</select>
 <!--~~~~~~~~~~Google~~~~~~~~~~-->
 <br>
 <input class="_button" type="button" name="google" value="Google" tabindex="1" onClick='search(
@@ -734,10 +745,11 @@ function sortCharacters(){
 -->
 <br>
 <font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
-	<p>ver.9.1</p>
+	<p>ver.10</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
+	10		リンク作成チェックボックスを、開く／URL作成／リンク作成 ポップアップメニューに。
 	9		textクエリがあればタイトルに含める。iOSでtextが複数行の場合、リンク作成をオンに。
 	8		テキストが空でリンク作成がオンならトップページのリンクを作成。
 	7		「リンク作成」にリンクなしのURLも追加。Google画像URLを更新。Yahoo!ニュースをGoogle検索を追加。
