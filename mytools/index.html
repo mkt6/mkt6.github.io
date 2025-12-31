@@ -76,6 +76,11 @@ function adjustEditTextareaHeight(){
 	editTextarea.style.height = 'auto';//一旦リセット
 	editTextarea.style.height = editTextarea.scrollHeight + 'px';
 }
+// editTextareaの内容を設定。
+function setEditTextareaValue(str){
+	document.editForm.editTextarea.value = str;
+	adjustEditTextareaHeight()
+}
 function _onload(){
 	const isMac = (navigator.maxTouchPoints <= 0);
 	const editTextarea = document.editForm.editTextarea;
@@ -110,17 +115,16 @@ function _onload(){
 	}
 	// textクエリ指定があれば入れる。
 	if(txtVal){
-		editTextarea.value = txtVal;
+		setEditTextareaValue(txtVal);
 		// タイトルにtextを含める。
 		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
-		// iOSでtextが複数行の場合、「URLで置き換え」に。
+		// iOSでtextが複数行の場合、「URLで置き換え」を選択しておく。
 		if(!isMac && isMultiLineString(txtVal)){
 			document.editForm.operation.value = 'makeURL';
 		}
 	}
-	// editTextareaの高さを内容に合わせる：変更時と今。
+	// editTextareaの高さを内容変更時に合わせる。
 	editTextarea.addEventListener('input',adjustEditTextareaHeight);
-	adjustEditTextareaHeight();
 	// フォーカスをtextareaに。
 	editTextarea.focus();
 }
@@ -176,7 +180,7 @@ function _paste(){
 	クリア
 */
 function clearAll(){
-	document.editForm.editTextarea.value = "";
+	setEditTextareaValue("");
 	document.getElementById('outputLabel').innerHTML = "";
 	// フォーカスが外れているので戻しておく
 	document.editForm.editTextarea.focus();
@@ -278,34 +282,34 @@ function evalAsJavaScript(){
 	小文字にする
 */
 function changeToLowerCase(){
-	document.editForm.editTextarea.value = document.editForm.editTextarea.value.toLocaleLowerCase();
+	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleLowerCase());
 }
 /*--------------------------------------------------
 	大文字にする
 */
 function changeToUpperCase(){
-	document.editForm.editTextarea.value = document.editForm.editTextarea.value.toLocaleUpperCase();
+	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleUpperCase());
 }
 /*--------------------------------------------------
 	URI encode,decode ...
 */
 function changeTo_escape(){
-	document.editForm.editTextarea.value = escape(document.editForm.editTextarea.value);
+	setEditTextareaValue(escape(document.editForm.editTextarea.value));
 }
 function changeTo_encodeURI(){
-	document.editForm.editTextarea.value = encodeURI(document.editForm.editTextarea.value);
+	setEditTextareaValue(encodeURI(document.editForm.editTextarea.value));
 }
 function changeTo_encodeURIComponent(){
-	document.editForm.editTextarea.value = encodeURIComponent(document.editForm.editTextarea.value);
+	setEditTextareaValue(encodeURIComponent(document.editForm.editTextarea.value));
 }
 function changeTo_unescape(){
-	document.editForm.editTextarea.value = unescape(document.editForm.editTextarea.value);
+	setEditTextareaValue(unescape(document.editForm.editTextarea.value));
 }
 function changeTo_decodeURI(){
-	document.editForm.editTextarea.value = decodeURI(document.editForm.editTextarea.value);
+	setEditTextareaValue(decodeURI(document.editForm.editTextarea.value));
 }
 function changeTo_decodeURIComponent(){
-	document.editForm.editTextarea.value = decodeURIComponent(document.editForm.editTextarea.value);
+	setEditTextareaValue(decodeURIComponent(document.editForm.editTextarea.value));
 }
 /*==================================================================================================
 		行単位編集処理
@@ -326,7 +330,7 @@ function sortParagraphs(){
 			setString += lineArray[i] + "\n";
 		}
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 /*--------------------------------------------------
 	行頭と行末に追加
@@ -353,7 +357,7 @@ function addToParagraphs(){
 		}
 		setString += prefixString + lineArray[i] + suffixString;
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 /*--------------------------------------------------
 	URLを開く
@@ -430,7 +434,7 @@ function trimParagraphsLeft(){
 		}
 		setString += lineArray[i].trimLeft();
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 /*--------------------------------------------------
 	行の後ろの空白を削除
@@ -446,7 +450,7 @@ function trimParagraphsRight(){
 		}
 		setString += lineArray[i].trimRight();
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 /*--------------------------------------------------
 	行の前後の空白を削除
@@ -462,7 +466,7 @@ function trimParagraphs(){
 		}
 		setString += lineArray[i].trim();
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 /*==================================================================================================
 		編集処理
@@ -491,7 +495,7 @@ function insertToCharacters(){
 			setString += newLineStr;
 		}
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 /*--------------------------------------------------
 	文字ソート
@@ -518,7 +522,7 @@ function sortCharacters(){
 			setString += lineString;
 		}
 	}
-	document.editForm.editTextarea.value = setString;
+	setEditTextareaValue(setString);
 }
 </script>
 
@@ -763,7 +767,7 @@ function sortCharacters(){
 -->
 <br>
 <font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
-	<p>ver.12</p>
+	<p>ver.12.1</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
