@@ -70,24 +70,31 @@ function isMultiLineString(inString){
 	}
 	return false;
 }
+// editTextareaの高さを内容に合わせる。
+function adjustEditTextareaHeight(){
+	const editTextarea = document.editForm.editTextarea;
+	editTextarea.style.height = 'auto';//一旦リセット
+	editTextarea.style.height = editTextarea.scrollHeight + 'px';
+}
 function _onload(){
 	const isMac = (navigator.maxTouchPoints <= 0);
+	const editTextarea = document.editForm.editTextarea;
 	// 表示内容の調整。
 	if(isMac){
-		document.editForm.editTextarea.rows = 20;
+		editTextarea.rows = 20;
 		// コピー/選択系ボタンは要らないので非表示。
 		document.editForm.pasteButton.style.display = 'none';
 		document.editForm.copyButton.style.display = 'none';
 		document.editForm.selectAllButton.style.display = 'none';
 		document.editForm.copyAllButton.style.display = 'none';
 		document.getElementById('editButtonsSpace').style.display = 'none';
-		document.getElementById('editButtonsSpace2').style.display = 'none';
-		document.editForm.decreaseEditTextButton.style.display = 'none';
-		document.editForm.increaseEditTextButton.style.display = 'none';
+		//document.getElementById('editButtonsSpace2').style.display = 'none';
+		//document.editForm.decreaseEditTextButton.style.display = 'none';
+		//document.editForm.increaseEditTextButton.style.display = 'none';
 	}else{//iOS
-		document.editForm.editTextarea.rows = 5;
+		editTextarea.rows = 5;
 		// より狭くしないとスクロールバーが被る。
-		document.editForm.editTextarea.style.width = '94%';
+		editTextarea.style.width = '94%';
 	}
 	// クエリ解析。
 	const queryArr = document.URL.split('?').pop().split('&');
@@ -103,7 +110,7 @@ function _onload(){
 	}
 	// textクエリ指定があれば入れる。
 	if(txtVal){
-		document.editForm.editTextarea.value = txtVal;
+		editTextarea.value = txtVal;
 		// タイトルにtextを含める。
 		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
 		// iOSでtextが複数行の場合、「URLで置き換え」に。
@@ -111,8 +118,11 @@ function _onload(){
 			document.editForm.operation.value = 'makeURL';
 		}
 	}
+	// editTextareaの高さを内容に合わせる：変更時と今。
+	editTextarea.addEventListener('input',adjustEditTextareaHeight);
+	adjustEditTextareaHeight();
 	// フォーカスをtextareaに。
-	document.editForm.editTextarea.focus();
+	editTextarea.focus();
 }
 </script>
 
@@ -531,9 +541,11 @@ function sortCharacters(){
 <input class="_button" type="button" name="copyAllButton" value="すべてをコピー" onClick='copyAll()' tabindex="1">
 <label id="editButtonsSpace">　</label>
 <input class="_button" type="button" name="clearButton" value="クリア" onClick='clearAll()' tabindex="1">
+<!--
 <label id="editButtonsSpace2">　</label>
 <input class="_button" type="button" name="decreaseEditTextButton" value="▲" onClick='decreaseEditText()' tabindex="1">
 <input class="_button" type="button" name="increaseEditTextButton" value="▼" onClick='increaseEditText()' tabindex="1">
+-->
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		テキストエリア
 -->
@@ -751,10 +763,11 @@ function sortCharacters(){
 -->
 <br>
 <font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
-	<p>ver.11.1</p>
+	<p>ver.12</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
+	12		エディタの高さを自動調整。
 	11		リンク作成後にリンクにスクロール。
 	10		リンク作成チェックボックスを、開く／URL作成／リンク作成 ポップアップメニューに。
 	9		textクエリがあればタイトルに含める。iOSでtextが複数行の場合、リンク作成をオンに。
