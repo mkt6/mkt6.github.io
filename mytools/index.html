@@ -26,7 +26,7 @@
 <!--================================================================================================
 		ここからBODY
 -->
-<body onload='_onload();' style="height:100%;margin:0;background:#E0E8F0;">
+<body style="height:100%;margin:0;background:#E0E8F0;">
 <!--================================================================================================
 		NO SCRIPT
 -->
@@ -274,7 +274,7 @@
 -->
 <br>
 <font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
-	<p>ver.12.1</p>
+	<p>ver.12.2</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
@@ -298,20 +298,9 @@
 		JavaScript
 -->
 <script>
-// 自分自身(このページ)を引数のクエリでopen。
-function openSelf(inText = null){
-	var urlStr = document.URL.split('?').shift();
-	if(inText){
-		urlStr = urlStr + '?text=' + encodeURIComponent(inText);
-	}
-	window.open(urlStr,'_top');
-}
-// outputLabelのHTMLを設定し、見える位置にスクロール。
-function setOutputHTML(inHTMLString){
-	const label = document.getElementById('outputLabel');
-	label.innerHTML = inHTMLString;
-	label.scrollIntoView({behavior:'smooth',block:'center'});
-}
+/*==================================================================================================
+		サブルーチン：文字列
+*/
 // 引数の文字列を、空白文字と改行を最小限にした1行にする。
 function shortenString(inString){
 	var newStr = '';
@@ -343,6 +332,26 @@ function isMultiLineString(inString){
 	}
 	return false;
 }
+/*==================================================================================================
+		サブルーチン：open
+*/
+// 自分自身(このページ)を引数のクエリでopen。
+function openSelf(inText = null){
+	var urlStr = document.URL.split('?').shift();
+	if(inText){
+		urlStr = urlStr + '?text=' + encodeURIComponent(inText);
+	}
+	window.open(urlStr,'_top');
+}
+/*==================================================================================================
+		サブルーチン：form要素
+*/
+// outputLabelのHTMLを設定し、見える位置にスクロール。
+function setOutputHTML(inHTMLString){
+	const label = document.getElementById('outputLabel');
+	label.innerHTML = inHTMLString;
+	label.scrollIntoView({behavior:'smooth',block:'center'});
+}
 // editTextareaの高さを内容に合わせる。
 function adjustEditTextareaHeight(){
 	const editTextarea = document.editForm.editTextarea;
@@ -354,7 +363,10 @@ function setEditTextareaValue(str){
 	document.editForm.editTextarea.value = str;
 	adjustEditTextareaHeight()
 }
-function _onload(){
+/*==================================================================================================
+		イベントハンドラ
+*/
+function handleDOMContentLoaded(event){
 	const isMac = (navigator.maxTouchPoints <= 0);
 	const editTextarea = document.editForm.editTextarea;
 	// 表示内容の調整。
@@ -374,6 +386,10 @@ function _onload(){
 		// より狭くしないとスクロールバーが被る。
 		editTextarea.style.width = '94%';
 	}
+}
+function handleLoad(event){
+	const isMac = (navigator.maxTouchPoints <= 0);
+	const editTextarea = document.editForm.editTextarea;
 	// クエリ解析。
 	const queryArr = document.URL.split('?').pop().split('&');
 	var txtVal = null;
@@ -776,6 +792,11 @@ function sortCharacters(){
 	}
 	setEditTextareaValue(setString);
 }
+/*==================================================================================================
+		実行
+*/
+window.addEventListener('DOMContentLoaded',handleDOMContentLoaded);
+window.addEventListener('load',handleLoad);
 </script>
 </body>
 </html>
