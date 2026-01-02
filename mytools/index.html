@@ -23,509 +23,16 @@
 	}
 	</style>
 </head>
-
-<script>
-// 自分自身(このページ)を引数のクエリでopen。
-function openSelf(inText = null){
-	var urlStr = document.URL.split('?').shift();
-	if(inText){
-		urlStr = urlStr + '?text=' + encodeURIComponent(inText);
-	}
-	window.open(urlStr,'_top');
-}
-// outputLabelのHTMLを設定し、見える位置にスクロール。
-function setOutputHTML(inHTMLString){
-	const label = document.getElementById('outputLabel');
-	label.innerHTML = inHTMLString;
-	label.scrollIntoView({behavior:'smooth',block:'center'});
-}
-// 引数の文字列を、空白文字と改行を最小限にした1行にする。
-function shortenString(inString){
-	var newStr = '';
-	const spaces = ' \t　\n\r';
-	var wasSpace = false;
-	for(let i=0; i<inString.length; i++){
-		const ch = inString.charAt(i);
-		if(spaces.includes(ch)){
-			wasSpace = true;
-		}else{
-			if(wasSpace && newStr.length>0){
-				newStr += ' ';
-			}
-			newStr += ch;
-			wasSpace = false;
-		}
-	}
-	return newStr;
-}
-// 空行を除いても複数行か。
-function isMultiLineString(inString){
-	const lineArr = inString.split("\n");
-	var lineCount = 0;
-	for(let i=0; i<inString.length; i++){
-		if(lineArr[i].length>0){
-			lineCount++;
-			if(lineCount>=2){ return true; }
-		}
-	}
-	return false;
-}
-// editTextareaの高さを内容に合わせる。
-function adjustEditTextareaHeight(){
-	const editTextarea = document.editForm.editTextarea;
-	editTextarea.style.height = 'auto';//一旦リセット
-	editTextarea.style.height = editTextarea.scrollHeight + 'px';
-}
-// editTextareaの内容を設定。
-function setEditTextareaValue(str){
-	document.editForm.editTextarea.value = str;
-	adjustEditTextareaHeight()
-}
-function _onload(){
-	const isMac = (navigator.maxTouchPoints <= 0);
-	const editTextarea = document.editForm.editTextarea;
-	// 表示内容の調整。
-	if(isMac){
-		editTextarea.rows = 20;
-		// コピー/選択系ボタンは要らないので非表示。
-		document.editForm.pasteButton.style.display = 'none';
-		document.editForm.copyButton.style.display = 'none';
-		document.editForm.selectAllButton.style.display = 'none';
-		document.editForm.copyAllButton.style.display = 'none';
-		document.getElementById('editButtonsSpace').style.display = 'none';
-		//document.getElementById('editButtonsSpace2').style.display = 'none';
-		//document.editForm.decreaseEditTextButton.style.display = 'none';
-		//document.editForm.increaseEditTextButton.style.display = 'none';
-	}else{//iOS
-		editTextarea.rows = 5;
-		// より狭くしないとスクロールバーが被る。
-		editTextarea.style.width = '94%';
-	}
-	// クエリ解析。
-	const queryArr = document.URL.split('?').pop().split('&');
-	var txtVal = null;
-	for(let i=0; i<queryArr.length; i++){
-		const kvArr = queryArr[i].split('=');
-		if(kvArr.length<2){ continue; }
-		const keyStr = kvArr[0].toLowerCase();
-		const valStr = decodeURIComponent(kvArr[1]);
-		if(keyStr=='text'){
-			txtVal = valStr;
-		}
-	}
-	// textクエリ指定があれば入れる。
-	if(txtVal){
-		setEditTextareaValue(txtVal);
-		// タイトルにtextを含める。
-		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
-		// iOSでtextが複数行の場合、「URLで置き換え」を選択しておく。
-		if(!isMac && isMultiLineString(txtVal)){
-			document.editForm.operation.value = 'makeURL';
-		}
-	}
-	// editTextareaの高さを内容変更時に合わせる。
-	editTextarea.addEventListener('input',adjustEditTextareaHeight);
-	// フォーカスをtextareaに。
-	editTextarea.focus();
-}
-</script>
-
 <!--================================================================================================
 		ここからBODY
 -->
 <body onload='_onload();' style="height:100%;margin:0;background:#E0E8F0;">
-
 <!--================================================================================================
 		NO SCRIPT
 -->
 <noscript>
 <p>JavaScriptがOFFになっています。以下のボタンは使用出来ません。</p>
 </noscript>
-
-<!--================================================================================================
-		テキスト処理JavaScript
--->
-<script>
-/*==================================================================================================
-		編集
-*/
-/*--------------------------------------------------
-	選択範囲をコピー
-*/
-function copySelection(){
-	document.editForm.editTextarea.focus();
-	document.execCommand('copy');
-}
-/*--------------------------------------------------
-	全てを選択
-*/
-function selectAll(){
-	document.editForm.editTextarea.select();
-}
-/*--------------------------------------------------
-	全てを選択しコピー
-*/
-function copyAll(){
-	selectAll();
-	copySelection();
-}
-/*--------------------------------------------------
-	ペースト
-*/
-function _paste(){
-	document.editForm.editTextarea.focus();
-	document.execCommand('paste');
-}
-/*--------------------------------------------------
-	クリア
-*/
-function clearAll(){
-	setEditTextareaValue("");
-	document.getElementById('outputLabel').innerHTML = "";
-	// フォーカスが外れているので戻しておく
-	document.editForm.editTextarea.focus();
-}
-/*--------------------------------------------------
-	表示行数の増減
-*/
-function increaseEditText(){
-	var r = document.editForm.editTextarea.rows;
-	if(r < 5){ r=5; }else{ r+=5; }
-	document.editForm.editTextarea.rows = r;
-}
-function decreaseEditText(){
-	var r = document.editForm.editTextarea.rows - 5;
-	if(r < 5){ r=1; }
-	document.editForm.editTextarea.rows = r;
-}
-/*==================================================================================================
-		検索処理
-*/
-/*--------------------------------------------------
-	検索
-*/
-function search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = false){
-	const txt = document.editForm.editTextarea.value;
-	var winName = document.editForm.searchNewTab.checked ? '_blank' : '_top';
-	const operation = document.editForm.operation.value;
-	const isOpen = operation=='open';
-	const isMakeURL = isOpen? false : operation=='makeURL';
-	const isMakeLink = (isOpen || isMakeURL)? false : operation=='makeLink';
-	// 空ならトップページ。
-	if(txt.length <= 0){
-		if(isOpen){
-			window.open(topUrlStr, winName);
-		}else if(isMakeURL){
-			openSelf(topUrlStr);
-		}else if(isMakeLink){
-			setOutputHTML('<br><a href="' + topUrlStr + '" target="' + winName + '">' + topUrlStr + '</a>');
-		}
-		return;
-	}
-	// 使用する行だけにする。
-	var lineArray = txt.split("\n");
-	var wordArray = [];
-	for(var i=0; i<lineArray.length; i++){
-		if(lineArray[i].length > 0 && !wordArray.includes(lineArray[i])){ wordArray.push(lineArray[i]); }
-	}
-	// 検索語が複数の場合は常に新規タブ。
-	if(wordArray.length > 1){ winName = "_blank"; }
-	// 開くorリンク作成。
-	var linkHtmlStr = '';
-	var urlTxtStr = '';
-	for(var i=0; i<wordArray.length; i++){
-		var urlStr = urlPrefixStr + (escapeWord ? escape(wordArray[i]) : encodeURIComponent(wordArray[i])) + urlSuffixStr;
-		if(isOpen){
-			window.open(urlStr,winName);
-		}else if(isMakeURL){
-			urlTxtStr += urlStr + '\n';
-		}else if(isMakeLink){
-			linkHtmlStr += '<br><a href="' + urlStr + '" target="' + winName + '">' + wordArray[i] + '</a>';
-		}
-	}
-	if(isMakeURL){
-		openSelf(urlTxtStr);
-	}else if(isMakeLink){
-		setOutputHTML(linkHtmlStr);
-	}
-}
-/*==================================================================================================
-		解析処理
-*/
-/*--------------------------------------------------
-	文字数を数える
-*/
-function countCharacters(){
-	window.alert( document.editForm.editTextarea.value.length.toString() + "文字です" );
-	// フォーカスが外れているので戻しておく
-	document.editForm.editTextarea.focus();
-}
-/*--------------------------------------------------
-	JavaScriptとして実行
-*/
-function evalAsJavaScript(){
-	eval(document.editForm.editTextarea.value);
-	/*実行結果を表示する場合
-	var res = eval(document.editForm.editTextarea.value);
-	if(res == null){
-		res = "null";
-	}
-	window.alert("実行結果:\n" + res.toString());
-	*/
-	// フォーカスが外れているので戻しておく
-	document.editForm.editTextarea.focus();
-}
-/*==================================================================================================
-		文字編集処理
-*/
-/*--------------------------------------------------
-	小文字にする
-*/
-function changeToLowerCase(){
-	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleLowerCase());
-}
-/*--------------------------------------------------
-	大文字にする
-*/
-function changeToUpperCase(){
-	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleUpperCase());
-}
-/*--------------------------------------------------
-	URI encode,decode ...
-*/
-function changeTo_escape(){
-	setEditTextareaValue(escape(document.editForm.editTextarea.value));
-}
-function changeTo_encodeURI(){
-	setEditTextareaValue(encodeURI(document.editForm.editTextarea.value));
-}
-function changeTo_encodeURIComponent(){
-	setEditTextareaValue(encodeURIComponent(document.editForm.editTextarea.value));
-}
-function changeTo_unescape(){
-	setEditTextareaValue(unescape(document.editForm.editTextarea.value));
-}
-function changeTo_decodeURI(){
-	setEditTextareaValue(decodeURI(document.editForm.editTextarea.value));
-}
-function changeTo_decodeURIComponent(){
-	setEditTextareaValue(decodeURIComponent(document.editForm.editTextarea.value));
-}
-/*==================================================================================================
-		行単位編集処理
-*/
-/*--------------------------------------------------
-	行ソート
-*/
-function sortParagraphs(){
-	// 行単位で分割・ソート
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	lineArray.sort(function(a,b){
-		return a.localeCompare(b,"ja-JP",{numeric:true});
-	});
-	// stringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( lineArray[i].length > 0 ){
-			setString += lineArray[i] + "\n";
-		}
-	}
-	setEditTextareaValue(setString);
-}
-/*--------------------------------------------------
-	行頭と行末に追加
-*/
-function addToParagraphs(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// 追加文字を設定
-	var prefixString = prompt( "行頭に追加する文字を指定して下さい", "" );
-	if( prefixString == null ){
-		document.editForm.editTextarea.focus();
-		return;
-	}
-	var suffixString = prompt( "行末に追加する文字を指定して下さい", "" );
-	if( suffixString == null ){
-		document.editForm.editTextarea.focus();
-		return;
-	}
-	// 追加しつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
-		}
-		setString += prefixString + lineArray[i] + suffixString;
-	}
-	setEditTextareaValue(setString);
-}
-/*--------------------------------------------------
-	URLを開く
-*/
-function openURLs(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	if( lineArray.length <= 0 ){
-		return;
-	}
-	// 各行を補正
-	var displayURL = ""; //ユーザ確認表示用文字列
-	for( var i=(lineArray.length - 1); 0 <= i; i-- ){
-		if(lineArray[i].includes("://")){
-			// 5ch表記を修正
-			if( lineArray[i].indexOf("ttp:") == 0 ){
-				lineArray[i] = "h" + lineArray[i];
-			}else if( lineArray[i].indexOf("ttps:") == 0 ){
-				lineArray[i] = "h" + lineArray[i];
-			}
-			// URL表記にエンコード
-			// ※ encodeURIComponent() だと「:」や「/」までエンコードしてしまうのでencodeURI
-			lineArray[i] = encodeURI( lineArray[i] );
-			// displayURLに追加(逆順なので前に追加)
-			displayURL = "•" + lineArray[i] + "\n" + displayURL;
-		}else{ //それ以外は省く
-			lineArray.splice(i,1);
-		}
-	}
-	// ユーザ確認
-	if( ! window.confirm( "以下の" + lineArray.length.toString() + "個のURLを開きますか？\n\n" + displayURL ) ){
-		// キャンセル後、フォーカスが外れているので戻しておく
-		document.editForm.editTextarea.focus();
-		return;
-	}
-	// 開く
-	for( var i=0; i < lineArray.length; i++ ){
-		window.open( lineArray[i], "_blank" );
-	}
-}
-/*--------------------------------------------------
-	URLからリンクを作成
-*/
-function makeLinks(){
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	var html = "";
-	for(var i=0; i<lineArray.length; i++){
-		if(lineArray[i].includes("://")){
-			// 5ch表記を修正
-			if( lineArray[i].indexOf("ttp:") == 0 ){
-				lineArray[i] = "h" + lineArray[i];
-			}else if( lineArray[i].indexOf("ttps:") == 0 ){
-				lineArray[i] = "h" + lineArray[i];
-			}
-			// URL表記にエンコード
-			// ※ encodeURIComponent() だと「:」や「/」までエンコードしてしまうのでencodeURI
-			lineArray[i] = encodeURI( lineArray[i] );
-			html += '<br><a href="' + lineArray[i] + '" target="_blank">' + lineArray[i] + '</a>';
-		}
-	}
-	document.getElementById('outputLabel').innerHTML = html;
-}
-/*--------------------------------------------------
-	行の前の空白を削除
-*/
-function trimParagraphsLeft(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// trimしつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
-		}
-		setString += lineArray[i].trimLeft();
-	}
-	setEditTextareaValue(setString);
-}
-/*--------------------------------------------------
-	行の後ろの空白を削除
-*/
-function trimParagraphsRight(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// trimしつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
-		}
-		setString += lineArray[i].trimRight();
-	}
-	setEditTextareaValue(setString);
-}
-/*--------------------------------------------------
-	行の前後の空白を削除
-*/
-function trimParagraphs(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// trimしつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
-		}
-		setString += lineArray[i].trim();
-	}
-	setEditTextareaValue(setString);
-}
-/*==================================================================================================
-		編集処理
-*/
-/*--------------------------------------------------
-	文字間に挿入
-*/
-function insertToCharacters(){
-	var insertString = prompt("追加する文字を指定して下さい", "　");
-	if( insertString == null ){
-		document.editForm.editTextarea.focus();
-		return;
-	}
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	var setString = "";
-	for(var li=0; li < lineArray.length; li++){
-		var lineString = lineArray[li];
-		var newLineStr = "";
-		for(var ci=0; ci < lineString.length; ci++){
-			newLineStr += (ci<=0 ? "" : insertString) + lineString.charAt(ci);
-		}
-		
-		if(li + 1 < lineArray.length){
-			setString += newLineStr + "\n";
-		}else{
-			setString += newLineStr;
-		}
-	}
-	setEditTextareaValue(setString);
-}
-/*--------------------------------------------------
-	文字ソート
-*/
-function sortCharacters(){
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	var setString = "";
-	for( var li=0; li < lineArray.length; li++ ){
-		var lineString = lineArray[li];
-		var charArray = new Array();
-		
-		for( var ci=0; ci < lineString.length; ci++ ){
-			charArray[ci] = lineString.charAt(ci);
-		}
-		charArray.sort();
-		
-		lineString = "";
-		for( var ci=0; ci < charArray.length; ci++ ){
-			lineString += charArray[ci];
-		}
-		if( li + 1 < lineArray.length ){
-			setString += lineString + "\n";
-		}else{
-			setString += lineString;
-		}
-	}
-	setEditTextareaValue(setString);
-}
-</script>
-
 <!--================================================================================================
 		ここからTABLE(1x1)
 -->
@@ -537,7 +44,7 @@ function sortCharacters(){
 -->
 <form name="editForm" method="" action="" onSubmit="">
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		編集
+		操作ボタン
 -->
 <input class="_button" type="button" name="pasteButton" value="ペースト" onClick='_paste()' tabindex="1">
 <input class="_button" type="button" name="copyButton" value="コピー" onClick='copySelection()' tabindex="1">
@@ -556,7 +63,7 @@ function sortCharacters(){
 <br>
 <textarea name="editTextarea" rows=10 wrap="soft" tabindex="1" style="width:98%;font-family:monospace;font-size:14px;word-break:break-all;"></textarea>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		検索
+		各サイトでの検索ボタン
 -->
 <br>
 <label class="_settings"><input class="_settings" type="checkbox" name="searchNewTab" tabindex="2">1行でも新規タブ</label>　
@@ -716,13 +223,13 @@ function sortCharacters(){
 <!--~~~~~~~~~~検索はここまで~~~~~~~~~~-->
 <br>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		解析処理
+		解析ボタン
 -->
 <br>解析<br>
 <input class="_button" type="button" name="countCharButton" value="文字数を数える" onClick='countCharacters()'>
 <input class="_button" type="button" name="doJSButton" value="JavaScriptとして実行" onClick='evalAsJavaScript()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		文字変換処理
+		文字変換ボタン
 -->
 <br>文字変換<br>
 <input class="_button" type="button" name="lowerCaseButton" value="小文字にする" onClick='changeToLowerCase()'>
@@ -736,7 +243,7 @@ function sortCharacters(){
 <input class="_button" type="button" name="decodeURIButton" value="decodeURI" onClick='changeTo_decodeURI()'>
 <input class="_button" type="button" name="decodeURIComponentButton" value="decodeURIComponent" onClick='changeTo_decodeURIComponent()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		行単位処理
+		行単位ボタン
 -->
 <br>行単位<br>
 <input class="_button" type="button" name="sortParaButton" value="行ソート" onClick='sortParagraphs()'>
@@ -748,7 +255,7 @@ function sortCharacters(){
 <input class="_button" type="button" name="trimParaRightButton" value="行の後ろの空白を削除" onClick='trimParagraphsRight()'>
 <input class="_button" type="button" name="trimParaButton" value="行の前後の空白を削除" onClick='trimParagraphs()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		その他処理
+		その他ボタン
 -->
 <br>その他<br>
 <input class="_button" type="button" name="insertToCharButton" value="文字間に挿入" onClick='insertToCharacters()'>
@@ -784,10 +291,491 @@ function sortCharacters(){
 	2		検索ポータルの実装を移植。いくつかのサイトは廃止。
 	1		テキスト編集を元に新規作成。
 -->
-
 </td>
 </tr>
 </table>
-
+<!--================================================================================================
+		JavaScript
+-->
+<script>
+// 自分自身(このページ)を引数のクエリでopen。
+function openSelf(inText = null){
+	var urlStr = document.URL.split('?').shift();
+	if(inText){
+		urlStr = urlStr + '?text=' + encodeURIComponent(inText);
+	}
+	window.open(urlStr,'_top');
+}
+// outputLabelのHTMLを設定し、見える位置にスクロール。
+function setOutputHTML(inHTMLString){
+	const label = document.getElementById('outputLabel');
+	label.innerHTML = inHTMLString;
+	label.scrollIntoView({behavior:'smooth',block:'center'});
+}
+// 引数の文字列を、空白文字と改行を最小限にした1行にする。
+function shortenString(inString){
+	var newStr = '';
+	const spaces = ' \t　\n\r';
+	var wasSpace = false;
+	for(let i=0; i<inString.length; i++){
+		const ch = inString.charAt(i);
+		if(spaces.includes(ch)){
+			wasSpace = true;
+		}else{
+			if(wasSpace && newStr.length>0){
+				newStr += ' ';
+			}
+			newStr += ch;
+			wasSpace = false;
+		}
+	}
+	return newStr;
+}
+// 空行を除いても複数行か。
+function isMultiLineString(inString){
+	const lineArr = inString.split("\n");
+	var lineCount = 0;
+	for(let i=0; i<inString.length; i++){
+		if(lineArr[i].length>0){
+			lineCount++;
+			if(lineCount>=2){ return true; }
+		}
+	}
+	return false;
+}
+// editTextareaの高さを内容に合わせる。
+function adjustEditTextareaHeight(){
+	const editTextarea = document.editForm.editTextarea;
+	editTextarea.style.height = 'auto';//一旦リセット
+	editTextarea.style.height = editTextarea.scrollHeight + 'px';
+}
+// editTextareaの内容を設定。
+function setEditTextareaValue(str){
+	document.editForm.editTextarea.value = str;
+	adjustEditTextareaHeight()
+}
+function _onload(){
+	const isMac = (navigator.maxTouchPoints <= 0);
+	const editTextarea = document.editForm.editTextarea;
+	// 表示内容の調整。
+	if(isMac){
+		editTextarea.rows = 20;
+		// コピー/選択系ボタンは要らないので非表示。
+		document.editForm.pasteButton.style.display = 'none';
+		document.editForm.copyButton.style.display = 'none';
+		document.editForm.selectAllButton.style.display = 'none';
+		document.editForm.copyAllButton.style.display = 'none';
+		document.getElementById('editButtonsSpace').style.display = 'none';
+		//document.getElementById('editButtonsSpace2').style.display = 'none';
+		//document.editForm.decreaseEditTextButton.style.display = 'none';
+		//document.editForm.increaseEditTextButton.style.display = 'none';
+	}else{//iOS
+		editTextarea.rows = 5;
+		// より狭くしないとスクロールバーが被る。
+		editTextarea.style.width = '94%';
+	}
+	// クエリ解析。
+	const queryArr = document.URL.split('?').pop().split('&');
+	var txtVal = null;
+	for(let i=0; i<queryArr.length; i++){
+		const kvArr = queryArr[i].split('=');
+		if(kvArr.length<2){ continue; }
+		const keyStr = kvArr[0].toLowerCase();
+		const valStr = decodeURIComponent(kvArr[1]);
+		if(keyStr=='text'){
+			txtVal = valStr;
+		}
+	}
+	// textクエリ指定があれば入れる。
+	if(txtVal){
+		setEditTextareaValue(txtVal);
+		// タイトルにtextを含める。
+		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
+		// iOSでtextが複数行の場合、「URLで置き換え」を選択しておく。
+		if(!isMac && isMultiLineString(txtVal)){
+			document.editForm.operation.value = 'makeURL';
+		}
+	}
+	// editTextareaの高さを内容変更時に合わせる。
+	editTextarea.addEventListener('input',adjustEditTextareaHeight);
+	// フォーカスをtextareaに。
+	editTextarea.focus();
+}
+/*==================================================================================================
+		操作
+*/
+/*--------------------------------------------------
+	選択範囲をコピー
+*/
+function copySelection(){
+	document.editForm.editTextarea.focus();
+	document.execCommand('copy');
+}
+/*--------------------------------------------------
+	全てを選択
+*/
+function selectAll(){
+	document.editForm.editTextarea.select();
+}
+/*--------------------------------------------------
+	全てを選択しコピー
+*/
+function copyAll(){
+	selectAll();
+	copySelection();
+}
+/*--------------------------------------------------
+	ペースト
+*/
+function _paste(){
+	document.editForm.editTextarea.focus();
+	document.execCommand('paste');
+}
+/*--------------------------------------------------
+	クリア
+*/
+function clearAll(){
+	setEditTextareaValue("");
+	document.getElementById('outputLabel').innerHTML = "";
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
+}
+/*--------------------------------------------------
+	表示行数の増減
+*/
+function increaseEditText(){
+	var r = document.editForm.editTextarea.rows;
+	if(r < 5){ r=5; }else{ r+=5; }
+	document.editForm.editTextarea.rows = r;
+}
+function decreaseEditText(){
+	var r = document.editForm.editTextarea.rows - 5;
+	if(r < 5){ r=1; }
+	document.editForm.editTextarea.rows = r;
+}
+/*==================================================================================================
+		各サイトでの検索
+*/
+function search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = false){
+	const txt = document.editForm.editTextarea.value;
+	var winName = document.editForm.searchNewTab.checked ? '_blank' : '_top';
+	const operation = document.editForm.operation.value;
+	const isOpen = operation=='open';
+	const isMakeURL = isOpen? false : operation=='makeURL';
+	const isMakeLink = (isOpen || isMakeURL)? false : operation=='makeLink';
+	// 空ならトップページ。
+	if(txt.length <= 0){
+		if(isOpen){
+			window.open(topUrlStr, winName);
+		}else if(isMakeURL){
+			openSelf(topUrlStr);
+		}else if(isMakeLink){
+			setOutputHTML('<br><a href="' + topUrlStr + '" target="' + winName + '">' + topUrlStr + '</a>');
+		}
+		return;
+	}
+	// 使用する行だけにする。
+	var lineArray = txt.split("\n");
+	var wordArray = [];
+	for(var i=0; i<lineArray.length; i++){
+		if(lineArray[i].length > 0 && !wordArray.includes(lineArray[i])){ wordArray.push(lineArray[i]); }
+	}
+	// 検索語が複数の場合は常に新規タブ。
+	if(wordArray.length > 1){ winName = "_blank"; }
+	// 開くorリンク作成。
+	var linkHtmlStr = '';
+	var urlTxtStr = '';
+	for(var i=0; i<wordArray.length; i++){
+		var urlStr = urlPrefixStr + (escapeWord ? escape(wordArray[i]) : encodeURIComponent(wordArray[i])) + urlSuffixStr;
+		if(isOpen){
+			window.open(urlStr,winName);
+		}else if(isMakeURL){
+			urlTxtStr += urlStr + '\n';
+		}else if(isMakeLink){
+			linkHtmlStr += '<br><a href="' + urlStr + '" target="' + winName + '">' + wordArray[i] + '</a>';
+		}
+	}
+	if(isMakeURL){
+		openSelf(urlTxtStr);
+	}else if(isMakeLink){
+		setOutputHTML(linkHtmlStr);
+	}
+}
+/*==================================================================================================
+		解析
+*/
+/*--------------------------------------------------
+	文字数を数える
+*/
+function countCharacters(){
+	window.alert( document.editForm.editTextarea.value.length.toString() + "文字です" );
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
+}
+/*--------------------------------------------------
+	JavaScriptとして実行
+*/
+function evalAsJavaScript(){
+	eval(document.editForm.editTextarea.value);
+	/*実行結果を表示する場合
+	var res = eval(document.editForm.editTextarea.value);
+	if(res == null){
+		res = "null";
+	}
+	window.alert("実行結果:\n" + res.toString());
+	*/
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
+}
+/*==================================================================================================
+		文字変換
+*/
+/*--------------------------------------------------
+	小文字にする
+*/
+function changeToLowerCase(){
+	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleLowerCase());
+}
+/*--------------------------------------------------
+	大文字にする
+*/
+function changeToUpperCase(){
+	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleUpperCase());
+}
+/*--------------------------------------------------
+	URI encode,decode ...
+*/
+function changeTo_escape(){
+	setEditTextareaValue(escape(document.editForm.editTextarea.value));
+}
+function changeTo_encodeURI(){
+	setEditTextareaValue(encodeURI(document.editForm.editTextarea.value));
+}
+function changeTo_encodeURIComponent(){
+	setEditTextareaValue(encodeURIComponent(document.editForm.editTextarea.value));
+}
+function changeTo_unescape(){
+	setEditTextareaValue(unescape(document.editForm.editTextarea.value));
+}
+function changeTo_decodeURI(){
+	setEditTextareaValue(decodeURI(document.editForm.editTextarea.value));
+}
+function changeTo_decodeURIComponent(){
+	setEditTextareaValue(decodeURIComponent(document.editForm.editTextarea.value));
+}
+/*==================================================================================================
+		行単位
+*/
+/*--------------------------------------------------
+	行ソート
+*/
+function sortParagraphs(){
+	// 行単位で分割・ソート
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	lineArray.sort(function(a,b){
+		return a.localeCompare(b,"ja-JP",{numeric:true});
+	});
+	// stringに戻す
+	var setString = "";
+	for( var i=0; i < lineArray.length; i++ ){
+		if( lineArray[i].length > 0 ){
+			setString += lineArray[i] + "\n";
+		}
+	}
+	setEditTextareaValue(setString);
+}
+/*--------------------------------------------------
+	行頭と行末に追加
+*/
+function addToParagraphs(){
+	// 行単位で分割
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	// 追加文字を設定
+	var prefixString = prompt( "行頭に追加する文字を指定して下さい", "" );
+	if( prefixString == null ){
+		document.editForm.editTextarea.focus();
+		return;
+	}
+	var suffixString = prompt( "行末に追加する文字を指定して下さい", "" );
+	if( suffixString == null ){
+		document.editForm.editTextarea.focus();
+		return;
+	}
+	// 追加しつつstringに戻す
+	var setString = "";
+	for( var i=0; i < lineArray.length; i++ ){
+		if( i > 0 ){
+			setString += "\n";
+		}
+		setString += prefixString + lineArray[i] + suffixString;
+	}
+	setEditTextareaValue(setString);
+}
+/*--------------------------------------------------
+	URLを開く
+*/
+function openURLs(){
+	// 行単位で分割
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	if( lineArray.length <= 0 ){
+		return;
+	}
+	// 各行を補正
+	var displayURL = ""; //ユーザ確認表示用文字列
+	for( var i=(lineArray.length - 1); 0 <= i; i-- ){
+		if(lineArray[i].includes("://")){
+			// 5ch表記を修正
+			if( lineArray[i].indexOf("ttp:") == 0 ){
+				lineArray[i] = "h" + lineArray[i];
+			}else if( lineArray[i].indexOf("ttps:") == 0 ){
+				lineArray[i] = "h" + lineArray[i];
+			}
+			// URL表記にエンコード
+			// ※ encodeURIComponent() だと「:」や「/」までエンコードしてしまうのでencodeURI
+			lineArray[i] = encodeURI( lineArray[i] );
+			// displayURLに追加(逆順なので前に追加)
+			displayURL = "•" + lineArray[i] + "\n" + displayURL;
+		}else{ //それ以外は省く
+			lineArray.splice(i,1);
+		}
+	}
+	// ユーザ確認
+	if( ! window.confirm( "以下の" + lineArray.length.toString() + "個のURLを開きますか？\n\n" + displayURL ) ){
+		// キャンセル後、フォーカスが外れているので戻しておく
+		document.editForm.editTextarea.focus();
+		return;
+	}
+	// 開く
+	for( var i=0; i < lineArray.length; i++ ){
+		window.open( lineArray[i], "_blank" );
+	}
+}
+/*--------------------------------------------------
+	URLからリンクを作成
+*/
+function makeLinks(){
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	var html = "";
+	for(var i=0; i<lineArray.length; i++){
+		if(lineArray[i].includes("://")){
+			// 5ch表記を修正
+			if( lineArray[i].indexOf("ttp:") == 0 ){
+				lineArray[i] = "h" + lineArray[i];
+			}else if( lineArray[i].indexOf("ttps:") == 0 ){
+				lineArray[i] = "h" + lineArray[i];
+			}
+			// URL表記にエンコード
+			// ※ encodeURIComponent() だと「:」や「/」までエンコードしてしまうのでencodeURI
+			lineArray[i] = encodeURI( lineArray[i] );
+			html += '<br><a href="' + lineArray[i] + '" target="_blank">' + lineArray[i] + '</a>';
+		}
+	}
+	document.getElementById('outputLabel').innerHTML = html;
+}
+/*--------------------------------------------------
+	行の前の空白を削除
+*/
+function trimParagraphsLeft(){
+	// 行単位で分割
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	// trimしつつstringに戻す
+	var setString = "";
+	for( var i=0; i < lineArray.length; i++ ){
+		if( i > 0 ){
+			setString += "\n";
+		}
+		setString += lineArray[i].trimLeft();
+	}
+	setEditTextareaValue(setString);
+}
+/*--------------------------------------------------
+	行の後ろの空白を削除
+*/
+function trimParagraphsRight(){
+	// 行単位で分割
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	// trimしつつstringに戻す
+	var setString = "";
+	for( var i=0; i < lineArray.length; i++ ){
+		if( i > 0 ){
+			setString += "\n";
+		}
+		setString += lineArray[i].trimRight();
+	}
+	setEditTextareaValue(setString);
+}
+/*--------------------------------------------------
+	行の前後の空白を削除
+*/
+function trimParagraphs(){
+	// 行単位で分割
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	// trimしつつstringに戻す
+	var setString = "";
+	for( var i=0; i < lineArray.length; i++ ){
+		if( i > 0 ){
+			setString += "\n";
+		}
+		setString += lineArray[i].trim();
+	}
+	setEditTextareaValue(setString);
+}
+/*==================================================================================================
+		その他
+*/
+/*--------------------------------------------------
+	文字間に挿入
+*/
+function insertToCharacters(){
+	var insertString = prompt("追加する文字を指定して下さい", "　");
+	if( insertString == null ){
+		document.editForm.editTextarea.focus();
+		return;
+	}
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	var setString = "";
+	for(var li=0; li < lineArray.length; li++){
+		var lineString = lineArray[li];
+		var newLineStr = "";
+		for(var ci=0; ci < lineString.length; ci++){
+			newLineStr += (ci<=0 ? "" : insertString) + lineString.charAt(ci);
+		}
+		
+		if(li + 1 < lineArray.length){
+			setString += newLineStr + "\n";
+		}else{
+			setString += newLineStr;
+		}
+	}
+	setEditTextareaValue(setString);
+}
+/*--------------------------------------------------
+	文字ソート
+*/
+function sortCharacters(){
+	var lineArray = document.editForm.editTextarea.value.split("\n");
+	var setString = "";
+	for( var li=0; li < lineArray.length; li++ ){
+		var lineString = lineArray[li];
+		var charArray = new Array();
+		
+		for( var ci=0; ci < lineString.length; ci++ ){
+			charArray[ci] = lineString.charAt(ci);
+		}
+		charArray.sort();
+		
+		lineString = "";
+		for( var ci=0; ci < charArray.length; ci++ ){
+			lineString += charArray[ci];
+		}
+		if( li + 1 < lineArray.length ){
+			setString += lineString + "\n";
+		}else{
+			setString += lineString;
+		}
+	}
+	setEditTextareaValue(setString);
+}
+</script>
 </body>
 </html>
