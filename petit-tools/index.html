@@ -410,7 +410,7 @@ function handleLoad(event){
 	if(txtVal){
 		setEditTextareaValue(txtVal);
 		// タイトルにtextを含める。
-		document.title = 'ﾏｲﾂ　' + shortenString(txtVal);
+		document.title = 'PT　' + shortenString(txtVal);
 		// iOSでtextが複数行の場合、「URLで置き換え」を選択しておく。
 		if(!isMac && isMultiLineString(txtVal)){
 			document.editForm.operation.value = 'makeURL';
