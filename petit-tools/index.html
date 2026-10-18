@@ -59,10 +59,12 @@
 <input class="_button" type="button" name="clearButton" value="クリア" onClick='clearAll()' tabindex="1">
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		テキストエリア
-		developer.mozilla.org/ja/docs/Web/HTML/Reference/Global_attributes/autofocus
+
+	・iOSのSafariだとデフォルトが11pxと小さいので14px指定しておく。
+	・autofocusグローバル属性 developer.mozilla.org/ja/docs/Web/HTML/Reference/Global_attributes/autofocus
 -->
 <br>
-<textarea name="editTextarea" rows=10 wrap="soft" tabindex="1" style="width:98%;font-family:monospace;word-break:break-all;" autofocus></textarea>
+<textarea name="editTextarea" rows=10 wrap="soft" tabindex="1" style="width:98%;font-family:monospace;font-size:14px;word-break:break-all;" autofocus></textarea>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		各サイトでの検索ボタン
 -->
@@ -275,7 +277,7 @@
 -->
 <br>
 <font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
-	<p>ver.13.1</p>
+	<p>ver.13.2</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
@@ -463,7 +465,7 @@ function clearAll(){
 */
 function changeFontSize(delta){
 	const size = parseInt(getComputedStyle(document.editForm.editTextarea).fontSize);
-	document.editForm.editTextarea.style.fontSize = Math.max(10, size + delta) + 'px';
+	document.editForm.editTextarea.style.fontSize = Math.max(9,size+delta)+'px';
 	
 	adjustEditTextareaHeight();
 }
@@ -792,13 +794,12 @@ function sortCharacters(){
 }
 /*==================================================================================================
 		実行
-*/
-/*	chatgpt.com/c/69574900-eeac-8324-a6ef-8d90622a66d1
 
-	DOMContentLoaded
+	chatgpt.com/c/69574900-eeac-8324-a6ef-8d90622a66d1
+	・DOMContentLoaded
 		DOM構築完了。
 		表示・レイアウトを変える系の処理は、基本は DOMContentLoaded の方が効率的で体感も良い。
-	load
+	・load
 		画像・CSS・iframe も全部完了。
 		「画像サイズ・フォント・実測値」に依存するなら load（または一段遅らせる）。
 */
