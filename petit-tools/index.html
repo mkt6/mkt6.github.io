@@ -280,7 +280,7 @@
 -->
 <br>
 <font color="#A0A0A0" style="font-family:monospace;font-size:70%;">
-	<p>ver.14.2</p>
+	<p>ver.14.3</p>
 	<p>クエリの仕様: text=入力テキスト</p>
 </font>
 <!--
@@ -472,6 +472,8 @@ function changeFontSize(delta){
 	document.editForm.editTextarea.style.fontSize = Math.max(9,size+delta)+'px';
 	
 	adjustEditTextareaHeight();
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
 		各サイトでの検索
