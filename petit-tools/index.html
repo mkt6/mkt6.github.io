@@ -257,9 +257,9 @@
 <input class="_button" type="button" name="openURLsButton" value="URLを開く" onClick='do_openURLs()'>
 <input class="_button" type="button" name="makeLinksButton" value="URLからリンクを作成" onClick='do_makeLinks()'>
 <!-- trim系はFirefox 3.5の新機能(非標準) -->
-<input class="_button" type="button" name="trimParaLeftButton" value="行の前の空白を削除" onClick='trimParagraphsLeft()'>
-<input class="_button" type="button" name="trimParaRightButton" value="行の後ろの空白を削除" onClick='trimParagraphsRight()'>
-<input class="_button" type="button" name="trimParaButton" value="行の前後の空白を削除" onClick='trimParagraphs()'>
+<input class="_button" type="button" name="trimBeforeParaButton" value="行の前の空白を削除" onClick='do_trimBeforeParagraphs()'>
+<input class="_button" type="button" name="trimAfterParaButton" value="行の後ろの空白を削除" onClick='do_trimAfterParagraphs()'>
+<input class="_button" type="button" name="trimParaButton" value="行の前後の空白を削除" onClick='do_trimParagraphs()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		その他ボタン
 -->
@@ -703,50 +703,59 @@ function do_makeLinks(){
 /*--------------------------------------------------
 	行の前の空白を削除
 */
-function trimParagraphsLeft(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// trimしつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
+function do_trimBeforeParagraphs(){
+	// 行単位で分割。
+	const lineArray = document.editForm.editTextarea.value.split("\n");
+	// trimしつつstringに戻す。
+	var newStr = "";
+	for(var i=0; i < lineArray.length; i++){
+		if(i > 0){
+			newStr += "\n";
 		}
-		setString += lineArray[i].trimLeft();
+		newStr += lineArray[i].trimLeft();
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	行の後ろの空白を削除
 */
-function trimParagraphsRight(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// trimしつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
+function do_trimAfterParagraphs(){
+	// 行単位で分割。
+	const lineArray = document.editForm.editTextarea.value.split("\n");
+	// trimしつつstringに戻す。
+	var newStr = "";
+	for(var i=0; i < lineArray.length; i++){
+		if(i > 0){
+			newStr += "\n";
 		}
-		setString += lineArray[i].trimRight();
+		newStr += lineArray[i].trimRight();
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	行の前後の空白を削除
 */
-function trimParagraphs(){
-	// 行単位で分割
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	// trimしつつstringに戻す
-	var setString = "";
-	for( var i=0; i < lineArray.length; i++ ){
-		if( i > 0 ){
-			setString += "\n";
+function do_trimParagraphs(){
+	// 行単位で分割。
+	const lineArray = document.editForm.editTextarea.value.split("\n");
+	// trimしつつstringに戻す。
+	var newStr = "";
+	for(var i=0; i < lineArray.length; i++){
+		if(i > 0){
+			newStr += "\n";
 		}
-		setString += lineArray[i].trim();
+		newStr += lineArray[i].trim();
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
 		その他
