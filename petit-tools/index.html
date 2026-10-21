@@ -264,8 +264,8 @@
 		その他ボタン
 -->
 <br>その他<br>
-<input class="_button" type="button" name="insertToCharButton" value="文字間に挿入" onClick='insertToCharacters()'>
-<input class="_button" type="button" name="sortCharButton" value="文字ソート" onClick='sortCharacters()'>
+<input class="_button" type="button" name="insertToCharButton" value="文字間に挿入" onClick='do_insertToCharacters()'>
+<input class="_button" type="button" name="sortCharButton" value="文字ソート" onClick='do_sortCharacters()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		リンク出力label
 -->
@@ -620,13 +620,13 @@ function do_sortParagraphs(){
 		return a.localeCompare(b,"ja-JP",{numeric:true});
 	});
 	// stringに戻す
-	var setString = "";
+	var newStr = "";
 	for( var i=0; i < lineArray.length; i++ ){
 		if( lineArray[i].length > 0 ){
-			setString += lineArray[i] + "\n";
+			newStr += lineArray[i] + "\n";
 		}
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
 	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
@@ -649,14 +649,14 @@ function do_addToParagraphs(){
 		return;
 	}
 	// 追加しつつstringに戻す
-	var setString = "";
+	var newStr = "";
 	for( var i=0; i < lineArray.length; i++ ){
 		if( i > 0 ){
-			setString += "\n";
+			newStr += "\n";
 		}
-		setString += prefixString + lineArray[i] + suffixString;
+		newStr += prefixString + lineArray[i] + suffixString;
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
 	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
@@ -780,55 +780,62 @@ function do_trimParagraphs(){
 /*--------------------------------------------------
 	文字間に挿入
 */
-function insertToCharacters(){
-	var insertString = prompt("追加する文字を指定して下さい", "　");
-	if( insertString == null ){
+function do_insertToCharacters(){
+	const insertStr = prompt("追加する文字を指定して下さい", "　");
+	if(insertStr == null){
+		// フォーカスを戻しておく。
 		document.editForm.editTextarea.focus();
 		return;
 	}
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	var setString = "";
+	const lineArray = document.editForm.editTextarea.value.split("\n");
+	var newStr = "";
 	for(var li=0; li < lineArray.length; li++){
-		var lineString = lineArray[li];
+		const lineStr = lineArray[li];
 		var newLineStr = "";
-		for(var ci=0; ci < lineString.length; ci++){
-			newLineStr += (ci<=0 ? "" : insertString) + lineString.charAt(ci);
+		for(var ci=0; ci < lineStr.length; ci++){
+			newLineStr += (ci<=0 ? "" : insertStr) + lineStr.charAt(ci);
 		}
 		
 		if(li + 1 < lineArray.length){
-			setString += newLineStr + "\n";
+			newStr += newLineStr + "\n";
 		}else{
-			setString += newLineStr;
+			newStr += newLineStr;
 		}
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	文字ソート
 */
-function sortCharacters(){
-	var lineArray = document.editForm.editTextarea.value.split("\n");
-	var setString = "";
-	for( var li=0; li < lineArray.length; li++ ){
-		var lineString = lineArray[li];
+function do_sortCharacters(){
+	const lineArray = document.editForm.editTextarea.value.split("\n");
+	var newStr = "";
+	for(var li=0; li < lineArray.length; li++){
+		var lineStr = lineArray[li];
 		var charArray = new Array();
 		
-		for( var ci=0; ci < lineString.length; ci++ ){
-			charArray[ci] = lineString.charAt(ci);
+		for(var ci=0; ci < lineStr.length; ci++){
+			charArray[ci] = lineStr.charAt(ci);
 		}
 		charArray.sort();
 		
-		lineString = "";
-		for( var ci=0; ci < charArray.length; ci++ ){
-			lineString += charArray[ci];
+		lineStr = "";
+		for(var ci=0; ci < charArray.length; ci++){
+			lineStr += charArray[ci];
 		}
-		if( li + 1 < lineArray.length ){
-			setString += lineString + "\n";
+		if(li + 1 < lineArray.length){
+			newStr += lineStr + "\n";
 		}else{
-			setString += lineString;
+			newStr += lineStr;
 		}
 	}
-	setEditTextareaValue(setString);
+	setEditTextareaValue(newStr);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
 		実行
