@@ -46,8 +46,8 @@
 		FORM 開始
 -->
 <form name="editForm" method="" action="" onSubmit="">
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		操作ボタン
+<!--------------------------------------------------------------------------------------------------
+		テキスト操作ボタン
 -->
 <input class="_button" type="button" name="pasteButton" value="ペースト" onClick='do_paste()' tabindex="1">
 <input class="_button" type="button" name="copyButton" value="コピー" onClick='do_copy()' tabindex="1">
@@ -57,7 +57,7 @@
 <input class="_button" type="button" name="minusButton" value="－" onClick='do_changeFontSize(-1)' tabindex="1">
 <label id="editButtonsSpace">　</label>
 <input class="_button" type="button" name="clearButton" value="クリア" onClick='do_clear()' tabindex="1">
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--------------------------------------------------------------------------------------------------
 		テキストエリア
 
 	・iOSのSafariだとデフォルトが11pxと小さいので14px指定しておく。
@@ -65,8 +65,8 @@
 -->
 <br>
 <textarea name="editTextarea" rows=10 wrap="soft" tabindex="1" style="width:98%;font-family:monospace;font-size:14px;word-break:break-all;" autofocus></textarea>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		各サイトでの検索ボタン
+<!--------------------------------------------------------------------------------------------------
+		動作設定（チェックボックス・ポップアップ）
 -->
 <br>
 <label class="_settings"><input class="_settings" type="checkbox" name="searchNewTab" tabindex="2">1行でも新規タブ</label>　
@@ -75,7 +75,9 @@
 	<option value="makeURL">URL作成</option>
 	<option value="makeLink">リンク作成</option>
 </select>
-<!--~~~~~~~~~~Google~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：検索サイト：Google
+-->
 <br>
 <input class="_button" type="button" name="googleButton" value="Google" tabindex="1" onClick='do_search(
 	"https://www.google.com/",
@@ -108,7 +110,9 @@
 <input class="_button" type="button" name="googleMapButton" value="Googleマップ" onClick='do_search(
 	"https://maps.google.com/",
 	"https://www.google.com/maps?q=")'>
-<!--~~~~~~~~~~その他検索サイト~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：検索サイト：その他
+-->
 <br>
 <input class="_button" type="button" name="googleYahooNewsButton" value="Yahoo!ニュースをGoogle検索" onClick='do_search(
 	"https://news.yahoo.co.jp/",
@@ -138,7 +142,9 @@
 <input class="_button" type="button" name="bingImagesButton" value="bing画像" onClick='do_search(
 	"http://www.bing.com/",
 	"http://www.bing.com/images/search?q=")'>
-<!--~~~~~~~~~~商品~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：買い物
+-->
 <br>&#128722;<!--🛒--><br>
 <input class="_button" type="button" name="amazonButton" value="Amazon" onClick='do_search(
 	"https://www.amazon.co.jp/",
@@ -160,7 +166,9 @@
 <input class="_button" type="button" name="appleButton" value="　　" onClick='do_search(
 	"http://www.apple.com/jp/",
 	"http://www.apple.com/jp/search/?q=")'>
-<!--~~~~~~~~~~技術情報~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：技術情報
+-->
 <br>&#9935;<!--⛏--><br>
 <input class="_button" type="button" name="googleAppleDevButton" value="DeveloperをGoogle検索" onClick='do_search(
 	"https://developer.apple.com/jp/",
@@ -181,7 +189,9 @@
 <input class="_button" type="button" name="mdnButton" value="MDN" onClick='do_search(
 	"https://developer.mozilla.org/ja",
 	"https://developer.mozilla.org/ja/search?q=")'>
-<!--~~~~~~~~~~百科事典~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：百科事典
+-->
 <br>&#128218;<!--📚--><br>
 <input class="_button" type="button" name="wikipediaButton" value="Wikipedia" onClick='do_search(
 	"https://ja.wikipedia.org/",
@@ -195,7 +205,9 @@
 <input class="_button" type="button" name="pixivDicButton" value="ピクシブ百科事典" onClick='do_search(
 	"http://dic.pixiv.net/",
 	"http://dic.pixiv.net/search?query=")'>
-<!--~~~~~~~~~~その他サイト~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：メディア・SNS
+-->
 <br>&#128250;<!--📺--><br>
 <input class="_button" type="button" name="youtubeButton" value="YouTube" onClick='do_search(
 	"http://www.youtube.com/",
@@ -215,7 +227,9 @@
 <input class="_button" type="button" name="xButton" value="　𝕏　" onClick='do_search(
 	"https://x.com/",
 	"https://x.com/search?q=")'>
-<!--~~~~~~~~~~配達状況~~~~~~~~~~-->
+<!--------------------------------------------------------------------------------------------------
+		ボタン：配達状況
+-->
 <br>&#128230;<!--📦--><br>
 <input class="_button" type="button" name="kuronekoyamatoButton" value="クロネコヤマト" onClick='do_search(
 	"https://cmypage.kuronekoyamato.co.jp/",
@@ -226,16 +240,15 @@
 <input class="_button" type="button" name="sagawaButton" value="佐川急便" onClick='do_search(
 	"https://www.e-service.sagawa-exp.co.jp/",
 	"https://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=")'>
-<!--~~~~~~~~~~検索はここまで~~~~~~~~~~-->
 <br>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		解析ボタン
+<!--------------------------------------------------------------------------------------------------
+		ボタン：文字解析
 -->
 <br>解析<br>
 <input class="_button" type="button" name="countCharButton" value="文字数を数える" onClick='do_countCharacters()'>
 <input class="_button" type="button" name="exeJSButton" value="JavaScriptとして実行" onClick='do_exeJavaScript()'>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		文字変換ボタン
+<!--------------------------------------------------------------------------------------------------
+		ボタン：文字変換
 -->
 <br>文字変換<br>
 <input class="_button" type="button" name="lowerCaseButton" value="小文字にする" onClick='do_lowerCase()'>
@@ -248,8 +261,8 @@
 <input class="_button" type="button" name="unescapeButton" value="unescape" onClick='do_unescape()'>
 <input class="_button" type="button" name="decodeURIButton" value="decodeURI" onClick='do_decodeURI()'>
 <input class="_button" type="button" name="decodeURIComponentButton" value="decodeURIComponent" onClick='do_decodeURIComponent()'>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		行単位ボタン
+<!--------------------------------------------------------------------------------------------------
+		ボタン：行単位
 -->
 <br>行単位<br>
 <input class="_button" type="button" name="sortParaButton" value="行ソート" onClick='do_sortParagraphs()'>
@@ -260,13 +273,13 @@
 <input class="_button" type="button" name="trimBeforeParaButton" value="行の前の空白を削除" onClick='do_trimBeforeParagraphs()'>
 <input class="_button" type="button" name="trimAfterParaButton" value="行の後ろの空白を削除" onClick='do_trimAfterParagraphs()'>
 <input class="_button" type="button" name="trimParaButton" value="行の前後の空白を削除" onClick='do_trimParagraphs()'>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		その他ボタン
+<!--------------------------------------------------------------------------------------------------
+		ボタン：その他
 -->
 <br>その他<br>
 <input class="_button" type="button" name="insertToCharButton" value="文字間に挿入" onClick='do_insertToCharacters()'>
 <input class="_button" type="button" name="sortCharButton" value="文字ソート" onClick='do_sortCharacters()'>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--------------------------------------------------------------------------------------------------
 		リンク出力label
 -->
 <br>
@@ -275,7 +288,7 @@
 		FORM 終わり
 -->
 </form> <!-- name="editForm" -->
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--------------------------------------------------------------------------------------------------
 		バージョン情報
 -->
 <br>
@@ -309,7 +322,7 @@
 		JavaScript
 -->
 <script>
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		サブルーチン：文字列
 */
 // 引数の文字列を、空白文字と改行を半角スペースに置き換えた1行にする。
@@ -343,7 +356,7 @@ function isMultiLineString(inString){
 	}
 	return false;
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		サブルーチン：open
 */
 // 自分自身(このページ)を引数のクエリでopen。
@@ -354,7 +367,7 @@ function openSelf(inText = null){
 	}
 	window.open(urlStr,'_top');
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		サブルーチン：form要素
 */
 // outputLabelのHTMLを設定し、見える位置にスクロール。
@@ -374,7 +387,7 @@ function setEditTextareaValue(str){
 	document.editForm.editTextarea.value = str;
 	adjustEditTextareaHeight();
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		イベントハンドラ
 */
 function handle_DOMContentLoaded(event){
@@ -425,37 +438,37 @@ function handle_load(event){
 	// フォーカスをtextareaに。
 	//editTextarea.focus();//autofocusで不要かもしれないので一旦やめてみる。
 }
-/*==================================================================================================
-		操作
+/*--------------------------------------------------------------------------------------------------
+		テキスト操作
 */
-/*--------------------------------------------------
+/*
 	ペースト
 */
 function do_paste(){
 	document.editForm.editTextarea.focus();
 	document.execCommand('paste');
 }
-/*--------------------------------------------------
+/*
 	選択範囲をコピー
 */
 function do_copy(){
 	document.editForm.editTextarea.focus();
 	document.execCommand('copy');
 }
-/*--------------------------------------------------
+/*
 	全てを選択
 */
 function do_selectAll(){
 	document.editForm.editTextarea.select();//これでフォーカスも入る。
 }
-/*--------------------------------------------------
+/*
 	全てを選択しコピー
 */
 function do_copyAll(){
 	do_selectAll();
 	do_copy();
 }
-/*--------------------------------------------------
+/*
 	テキストサイズの増減。
 */
 function do_changeFontSize(delta){
@@ -466,7 +479,7 @@ function do_changeFontSize(delta){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	クリア
 */
 function do_clear(){
@@ -476,7 +489,7 @@ function do_clear(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		各サイトでの検索
 */
 function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = false){
@@ -526,10 +539,10 @@ function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = fals
 	
 	// ToDo: 必要な場合にフォーカスを戻しておく。
 }
-/*==================================================================================================
-		解析
+/*--------------------------------------------------------------------------------------------------
+		文字解析
 */
-/*--------------------------------------------------
+/*
 	文字数を数える
 */
 function do_countCharacters(){
@@ -538,7 +551,7 @@ function do_countCharacters(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	JavaScriptとして実行
 */
 function do_exeJavaScript(){
@@ -547,10 +560,10 @@ function do_exeJavaScript(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		文字変換
 */
-/*--------------------------------------------------
+/*
 	小文字にする
 */
 function do_lowerCase(){
@@ -559,7 +572,7 @@ function do_lowerCase(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	大文字にする
 */
 function do_upperCase(){
@@ -568,9 +581,6 @@ function do_upperCase(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
-	URI encode,decode ...
-*/
 function do_escape(){
 	setEditTextareaValue(escape(document.editForm.editTextarea.value));
 	
@@ -607,10 +617,10 @@ function do_decodeURIComponent(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		行単位
 */
-/*--------------------------------------------------
+/*
 	行ソート
 */
 function do_sortParagraphs(){
@@ -631,7 +641,7 @@ function do_sortParagraphs(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	行頭と行末に追加
 */
 function do_addToParagraphs(){
@@ -661,7 +671,7 @@ function do_addToParagraphs(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	URLを開く
 */
 function do_openURLs(){
@@ -696,7 +706,7 @@ function do_openURLs(){
 	
 	// ※新規タブを開くので、フォーカスを戻すのは不要。
 }
-/*--------------------------------------------------
+/*
 	URLからリンクを作成
 */
 function do_makeLinks(){
@@ -717,7 +727,7 @@ function do_makeLinks(){
 	
 	// ※リンクのHTMLにスクロールするので、フォーカスを戻さない。
 }
-/*--------------------------------------------------
+/*
 	行の前の空白を削除
 */
 function do_trimBeforeParagraphs(){
@@ -736,7 +746,7 @@ function do_trimBeforeParagraphs(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	行の後ろの空白を削除
 */
 function do_trimAfterParagraphs(){
@@ -755,7 +765,7 @@ function do_trimAfterParagraphs(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	行の前後の空白を削除
 */
 function do_trimParagraphs(){
@@ -774,10 +784,10 @@ function do_trimParagraphs(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		その他
 */
-/*--------------------------------------------------
+/*
 	文字間に挿入
 */
 function do_insertToCharacters(){
@@ -807,7 +817,7 @@ function do_insertToCharacters(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*--------------------------------------------------
+/*
 	文字ソート
 */
 function do_sortCharacters(){
@@ -837,7 +847,7 @@ function do_sortCharacters(){
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
-/*==================================================================================================
+/*--------------------------------------------------------------------------------------------------
 		実行
 
 	chatgpt.com/c/69574900-eeac-8324-a6ef-8d90622a66d1
