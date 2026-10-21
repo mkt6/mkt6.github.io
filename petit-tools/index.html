@@ -143,11 +143,11 @@
 <input class="_button" type="button" name="amazonButton" value="Amazon" onClick='search(
 	"https://www.amazon.co.jp/",
 	"https://www.amazon.co.jp/s?k=")'>
-<input class="_button" type="button" name="kakakucomButton" value="価格.com" onClick='search(
+<input class="_button" type="button" name="kakakuComButton" value="価格.com" onClick='search(
 	"https://kakaku.com/",
 	"https://kakaku.com/search_results/?query=",
 	"", true)'>
-<input class="_button" type="button" name="yodobashicomButton" value="ヨドバシ.com" onClick='search(
+<input class="_button" type="button" name="yodobashiComButton" value="ヨドバシ.com" onClick='search(
 	"https://www.yodobashi.com/",
 	"https://www.yodobashi.com/?word=")'>
 <input class="_button" type="button" name="rakutenButton" value="楽天" onClick='search(
@@ -233,7 +233,7 @@
 -->
 <br>解析<br>
 <input class="_button" type="button" name="countCharButton" value="文字数を数える" onClick='countCharacters()'>
-<input class="_button" type="button" name="doJSButton" value="JavaScriptとして実行" onClick='evalAsJavaScript()'>
+<input class="_button" type="button" name="exeJSButton" value="JavaScriptとして実行" onClick='evalAsJavaScript()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		文字変換ボタン
 -->
@@ -377,7 +377,7 @@ function setEditTextareaValue(str){
 /*==================================================================================================
 		イベントハンドラ
 */
-function handleDOMContentLoaded(event){
+function handle_DOMContentLoaded(event){
 	const isMac = (navigator.maxTouchPoints <= 0);
 	const editTextarea = document.editForm.editTextarea;
 	// 表示内容の調整。
@@ -395,7 +395,7 @@ function handleDOMContentLoaded(event){
 		editTextarea.style.width = '94%';
 	}
 }
-function handleLoad(event){
+function handle_load(event){
 	const isMac = (navigator.maxTouchPoints <= 0);
 	const editTextarea = document.editForm.editTextarea;
 	// クエリ解析。
@@ -809,8 +809,8 @@ function sortCharacters(){
 		画像・CSS・iframe も全部完了。
 		「画像サイズ・フォント・実測値」に依存するなら load（または一段遅らせる）。
 */
-window.addEventListener('DOMContentLoaded',handleDOMContentLoaded);
-window.addEventListener('load',handleLoad);
+window.addEventListener('DOMContentLoaded',handle_DOMContentLoaded);
+window.addEventListener('load',handle_load);
 </script>
 </body>
 </html>
