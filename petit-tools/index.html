@@ -232,22 +232,22 @@
 		解析ボタン
 -->
 <br>解析<br>
-<input class="_button" type="button" name="countCharButton" value="文字数を数える" onClick='countCharacters()'>
-<input class="_button" type="button" name="exeJSButton" value="JavaScriptとして実行" onClick='evalAsJavaScript()'>
+<input class="_button" type="button" name="countCharButton" value="文字数を数える" onClick='do_countCharacters()'>
+<input class="_button" type="button" name="exeJSButton" value="JavaScriptとして実行" onClick='do_exeJavaScript()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		文字変換ボタン
 -->
 <br>文字変換<br>
-<input class="_button" type="button" name="lowerCaseButton" value="小文字にする" onClick='changeToLowerCase()'>
-<input class="_button" type="button" name="upperCaseButton" value="大文字にする" onClick='changeToUpperCase()'>
+<input class="_button" type="button" name="lowerCaseButton" value="小文字にする" onClick='do_lowerCase()'>
+<input class="_button" type="button" name="upperCaseButton" value="大文字にする" onClick='do_upperCase()'>
 <br>
-<input class="_button" type="button" name="escapeButton" value="escape" onClick='changeTo_escape()'>
-<input class="_button" type="button" name="encodeURIButton" value="encodeURI" onClick='changeTo_encodeURI()'>
-<input class="_button" type="button" name="encodeURIComponentButton" value="encodeURIComponent" onClick='changeTo_encodeURIComponent()'>
+<input class="_button" type="button" name="escapeButton" value="escape" onClick='do_escape()'>
+<input class="_button" type="button" name="encodeURIButton" value="encodeURI" onClick='do_encodeURI()'>
+<input class="_button" type="button" name="encodeURIComponentButton" value="encodeURIComponent" onClick='do_encodeURIComponent()'>
 <br>
-<input class="_button" type="button" name="unescapeButton" value="unescape" onClick='changeTo_unescape()'>
-<input class="_button" type="button" name="decodeURIButton" value="decodeURI" onClick='changeTo_decodeURI()'>
-<input class="_button" type="button" name="decodeURIComponentButton" value="decodeURIComponent" onClick='changeTo_decodeURIComponent()'>
+<input class="_button" type="button" name="unescapeButton" value="unescape" onClick='do_unescape()'>
+<input class="_button" type="button" name="decodeURIButton" value="decodeURI" onClick='do_decodeURI()'>
+<input class="_button" type="button" name="decodeURIComponentButton" value="decodeURIComponent" onClick='do_decodeURIComponent()'>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		行単位ボタン
 -->
@@ -529,23 +529,16 @@ function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = fals
 /*--------------------------------------------------
 	文字数を数える
 */
-function countCharacters(){
-	window.alert( document.editForm.editTextarea.value.length.toString() + "文字です" );
+function do_countCharacters(){
+	window.alert(document.editForm.editTextarea.value.length.toString() + "文字です");
 	// フォーカスが外れているので戻しておく
 	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	JavaScriptとして実行
 */
-function evalAsJavaScript(){
-	eval(document.editForm.editTextarea.value);
-	/*実行結果を表示する場合
-	var res = eval(document.editForm.editTextarea.value);
-	if(res == null){
-		res = "null";
-	}
-	window.alert("実行結果:\n" + res.toString());
-	*/
+function do_exeJavaScript(){
+	console.log(eval(document.editForm.editTextarea.value));
 	// フォーカスが外れているので戻しておく
 	document.editForm.editTextarea.focus();
 }
@@ -555,35 +548,51 @@ function evalAsJavaScript(){
 /*--------------------------------------------------
 	小文字にする
 */
-function changeToLowerCase(){
+function do_lowerCase(){
 	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleLowerCase());
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	大文字にする
 */
-function changeToUpperCase(){
+function do_upperCase(){
 	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleUpperCase());
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	URI encode,decode ...
 */
-function changeTo_escape(){
+function do_escape(){
 	setEditTextareaValue(escape(document.editForm.editTextarea.value));
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
-function changeTo_encodeURI(){
+function do_encodeURI(){
 	setEditTextareaValue(encodeURI(document.editForm.editTextarea.value));
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
-function changeTo_encodeURIComponent(){
+function do_encodeURIComponent(){
 	setEditTextareaValue(encodeURIComponent(document.editForm.editTextarea.value));
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
-function changeTo_unescape(){
+function do_unescape(){
 	setEditTextareaValue(unescape(document.editForm.editTextarea.value));
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
-function changeTo_decodeURI(){
+function do_decodeURI(){
 	setEditTextareaValue(decodeURI(document.editForm.editTextarea.value));
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
-function changeTo_decodeURIComponent(){
+function do_decodeURIComponent(){
 	setEditTextareaValue(decodeURIComponent(document.editForm.editTextarea.value));
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
 		行単位
