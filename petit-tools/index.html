@@ -446,7 +446,7 @@ function do_copy(){
 	全てを選択
 */
 function do_selectAll(){
-	document.editForm.editTextarea.select();
+	document.editForm.editTextarea.select();//これでフォーカスも入る。
 }
 /*--------------------------------------------------
 	全てを選択しコピー
@@ -472,6 +472,7 @@ function do_changeFontSize(delta){
 function do_clear(){
 	setEditTextareaValue("");
 	document.getElementById('outputLabel').innerHTML = "";
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
@@ -522,6 +523,8 @@ function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = fals
 	}else if(isMakeLink){
 		setOutputHTML(linkHtmlStr);
 	}
+	
+	// ToDo: 必要な場合にフォーカスを戻しておく。
 }
 /*==================================================================================================
 		解析
@@ -531,6 +534,7 @@ function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = fals
 */
 function do_countCharacters(){
 	window.alert(document.editForm.editTextarea.value.length.toString() + "文字です");
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
@@ -539,6 +543,7 @@ function do_countCharacters(){
 */
 function do_exeJavaScript(){
 	console.log(eval(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
@@ -550,6 +555,7 @@ function do_exeJavaScript(){
 */
 function do_lowerCase(){
 	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleLowerCase());
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
@@ -558,6 +564,7 @@ function do_lowerCase(){
 */
 function do_upperCase(){
 	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleUpperCase());
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
@@ -566,31 +573,37 @@ function do_upperCase(){
 */
 function do_escape(){
 	setEditTextareaValue(escape(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_encodeURI(){
 	setEditTextareaValue(encodeURI(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_encodeURIComponent(){
 	setEditTextareaValue(encodeURIComponent(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_unescape(){
 	setEditTextareaValue(unescape(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_decodeURI(){
 	setEditTextareaValue(decodeURI(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_decodeURIComponent(){
 	setEditTextareaValue(decodeURIComponent(document.editForm.editTextarea.value));
+	
 	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
@@ -680,6 +693,8 @@ function do_openURLs(){
 	for(var i=0; i < lineArray.length; i++){
 		window.open(lineArray[i],"_blank");
 	}
+	
+	// ※新規タブを開くので、フォーカスを戻すのは不要。
 }
 /*--------------------------------------------------
 	URLからリンクを作成
@@ -699,6 +714,8 @@ function do_makeLinks(){
 		}
 	}
 	setOutputHTML(htmlStr);
+	
+	// ※リンクのHTMLにスクロールするので、フォーカスを戻さない。
 }
 /*--------------------------------------------------
 	行の前の空白を削除
