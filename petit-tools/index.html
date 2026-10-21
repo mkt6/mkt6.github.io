@@ -77,153 +77,153 @@
 </select>
 <!--~~~~~~~~~~Google~~~~~~~~~~-->
 <br>
-<input class="_button" type="button" name="googleButton" value="Google" tabindex="1" onClick='search(
+<input class="_button" type="button" name="googleButton" value="Google" tabindex="1" onClick='do_search(
 	"https://www.google.com/",
 	"https://www.google.com/search?q=")'>
-<input class="_button" type="button" name="googleAIModeButton" value="Google AIモード" tabindex="1" onClick='search(
+<input class="_button" type="button" name="googleAIModeButton" value="Google AIモード" tabindex="1" onClick='do_search(
 	"https://www.google.com/search?udm=50",
 	"https://www.google.com/search?udm=50&q=")'>
-<input class="_button" type="button" name="googleJpButton" value="Google日本語のみ" tabindex="1" onClick='search(
+<input class="_button" type="button" name="googleJpButton" value="Google日本語のみ" tabindex="1" onClick='do_search(
 	"https://www.google.com/",
 	"https://www.google.com/search?q=",
 	"&lr=lang_ja")'>
-<input class="_button" type="button" name="googleNoJpButton" value="Google日本語以外" tabindex="1" onClick='search(
+<input class="_button" type="button" name="googleNoJpButton" value="Google日本語以外" tabindex="1" onClick='do_search(
 	"https://www.google.com/",
 	"https://www.google.com/search?q=",
 	"&lr=-lang_ja")'>
-<input class="_button" type="button" name="googleImageButton" value="Google画像" onClick='search(
+<input class="_button" type="button" name="googleImageButton" value="Google画像" onClick='do_search(
 	"https://www.google.com/imghp",
 	"https://www.google.com/search?q=",
 	"&tbm=isch")'>
-<input class="_button" type="button" name="googleImageURLButton" value="Google画像URL" onClick='search(
+<input class="_button" type="button" name="googleImageURLButton" value="Google画像URL" onClick='do_search(
 	"https://lens.google.com/",
 	"https://lens.google.com/uploadbyurl?url=")'>
-<input class="_button" type="button" name="googleVideoButton" value="Google動画" onClick='search(
+<input class="_button" type="button" name="googleVideoButton" value="Google動画" onClick='do_search(
 	"https://www.google.com/",
 	"https://www.google.com/search?q=",
 	"&tbm=vid")'>
-<input class="_button" type="button" name="googleNewsButton" value="Googleニュース" onClick='search(
+<input class="_button" type="button" name="googleNewsButton" value="Googleニュース" onClick='do_search(
 	"https://news.google.com/",
 	"https://www.google.com/search?tbm=nws&q=")'>
-<input class="_button" type="button" name="googleMapButton" value="Googleマップ" onClick='search(
+<input class="_button" type="button" name="googleMapButton" value="Googleマップ" onClick='do_search(
 	"https://maps.google.com/",
 	"https://www.google.com/maps?q=")'>
 <!--~~~~~~~~~~その他検索サイト~~~~~~~~~~-->
 <br>
-<input class="_button" type="button" name="googleYahooNewsButton" value="Yahoo!ニュースをGoogle検索" onClick='search(
+<input class="_button" type="button" name="googleYahooNewsButton" value="Yahoo!ニュースをGoogle検索" onClick='do_search(
 	"https://news.yahoo.co.jp/",
 	"https://www.google.com/search?q=",
 	"+site%3Anews.yahoo.co.jp")'>
-<input class="_button" type="button" name="yahooButton" value="Yahoo!" onClick='search(
+<input class="_button" type="button" name="yahooButton" value="Yahoo!" onClick='do_search(
 	"http://www.yahoo.co.jp/",
 	"http://search.yahoo.co.jp/search?p=",
 	"&ei=UTF-8")'>
-<input class="_button" type="button" name="yahooMapButton" value="Yahoo!地図" onClick='search(
+<input class="_button" type="button" name="yahooMapButton" value="Yahoo!地図" onClick='do_search(
 	"http://map.yahoo.co.jp/",
 	"http://map.yahoo.co.jp/search?p=")'>
-<input class="_button" type="button" name="duckduckgoButton" value="DuckDuckGo" onClick='search(
+<input class="_button" type="button" name="duckduckgoButton" value="DuckDuckGo" onClick='do_search(
 	"https://duckduckgo.com/",
 	"https://duckduckgo.com/?q=")'>
-<input class="_button" type="button" name="duckduckgoImageButton" value="DuckDuckGo画像" onClick='search(
+<input class="_button" type="button" name="duckduckgoImageButton" value="DuckDuckGo画像" onClick='do_search(
 	"https://duckduckgo.com/",
 	"https://duckduckgo.com/?q=",
 	"&iax=images&ia=images")'>
-<input class="_button" type="button" name="duckduckgoVideoButton" value="DuckDuckGo動画" onClick='search(
+<input class="_button" type="button" name="duckduckgoVideoButton" value="DuckDuckGo動画" onClick='do_search(
 	"https://duckduckgo.com/",
 	"https://duckduckgo.com/?q=",
 	"&iax=videos&ia=videos")'>
-<input class="_button" type="button" name="bingButton" value="bing" onClick='search(
+<input class="_button" type="button" name="bingButton" value="bing" onClick='do_search(
 	"http://www.bing.com/",
 	"http://www.bing.com/search?q=")'>
-<input class="_button" type="button" name="bingImagesButton" value="bing画像" onClick='search(
+<input class="_button" type="button" name="bingImagesButton" value="bing画像" onClick='do_search(
 	"http://www.bing.com/",
 	"http://www.bing.com/images/search?q=")'>
 <!--~~~~~~~~~~商品~~~~~~~~~~-->
 <br>&#128722;<!--🛒--><br>
-<input class="_button" type="button" name="amazonButton" value="Amazon" onClick='search(
+<input class="_button" type="button" name="amazonButton" value="Amazon" onClick='do_search(
 	"https://www.amazon.co.jp/",
 	"https://www.amazon.co.jp/s?k=")'>
-<input class="_button" type="button" name="kakakuComButton" value="価格.com" onClick='search(
+<input class="_button" type="button" name="kakakuComButton" value="価格.com" onClick='do_search(
 	"https://kakaku.com/",
 	"https://kakaku.com/search_results/?query=",
 	"", true)'>
-<input class="_button" type="button" name="yodobashiComButton" value="ヨドバシ.com" onClick='search(
+<input class="_button" type="button" name="yodobashiComButton" value="ヨドバシ.com" onClick='do_search(
 	"https://www.yodobashi.com/",
 	"https://www.yodobashi.com/?word=")'>
-<input class="_button" type="button" name="rakutenButton" value="楽天" onClick='search(
+<input class="_button" type="button" name="rakutenButton" value="楽天" onClick='do_search(
 	"https://www.rakuten.co.jp/",
 	"https://search.rakuten.co.jp/search/mall/",
 	"/")'>
-<input class="_button" type="button" name="yahooShoppingButton" value="Yahoo!ショッピング" onClick='search(
+<input class="_button" type="button" name="yahooShoppingButton" value="Yahoo!ショッピング" onClick='do_search(
 	"http://shopping.yahoo.co.jp/",
 	"http://search.shopping.yahoo.co.jp/search?p=")'>
-<input class="_button" type="button" name="appleButton" value="　　" onClick='search(
+<input class="_button" type="button" name="appleButton" value="　　" onClick='do_search(
 	"http://www.apple.com/jp/",
 	"http://www.apple.com/jp/search/?q=")'>
 <!--~~~~~~~~~~技術情報~~~~~~~~~~-->
 <br>&#9935;<!--⛏--><br>
-<input class="_button" type="button" name="googleAppleDevButton" value="DeveloperをGoogle検索" onClick='search(
+<input class="_button" type="button" name="googleAppleDevButton" value="DeveloperをGoogle検索" onClick='do_search(
 	"https://developer.apple.com/jp/",
 	"https://www.google.com/search?q=",
 	"+site%3Adeveloper.apple.com")'>
-<input class="_button" type="button" name="appleDevButton" value="Developer Documentation" onClick='search(
+<input class="_button" type="button" name="appleDevButton" value="Developer Documentation" onClick='do_search(
 	"https://developer.apple.com/documentation/",
 	"https://developer.apple.com/search/?q=")'>
-<input class="_button" type="button" name="osStatusButton" value="OSStatus.com" onClick='search(
+<input class="_button" type="button" name="osStatusButton" value="OSStatus.com" onClick='do_search(
 	"https://osstatus.com/",
 	"https://osstatus.com/search/results?platform=all&framework=all&search=")'>
-<!--<input class="_button" type="button" name="freeBSDjpmanButton" value="FreeBSD 日本語マニュアル" onClick='search(
+<!--<input class="_button" type="button" name="freeBSDjpmanButton" value="FreeBSD 日本語マニュアル" onClick='do_search(
 	"http://www.jp.freebsd.org/",
 	"http://www.jp.freebsd.org/cgi/mroff.cgi?subdir=man&lc=1&cmd=&dir=jpman-10.2.2/man&sect=0&man=")'>-->
-<!--<input class="_button" type="button" name="jmProjectButton" value="JM Project" onClick='search(
+<!--<input class="_button" type="button" name="jmProjectButton" value="JM Project" onClick='do_search(
 	"http://linuxjm.osdn.jp/",
 	"http://linuxjm.osdn.jp/cgi-bin/man.cgi?Sec1=on&Sec2=on&Sec3=on&Sec4=on&Sec5=on&Sec6=on&Sec7=on&Sec8=on&Pagename=")'>-->
-<input class="_button" type="button" name="mdnButton" value="MDN" onClick='search(
+<input class="_button" type="button" name="mdnButton" value="MDN" onClick='do_search(
 	"https://developer.mozilla.org/ja",
 	"https://developer.mozilla.org/ja/search?q=")'>
 <!--~~~~~~~~~~百科事典~~~~~~~~~~-->
 <br>&#128218;<!--📚--><br>
-<input class="_button" type="button" name="wikipediaButton" value="Wikipedia" onClick='search(
+<input class="_button" type="button" name="wikipediaButton" value="Wikipedia" onClick='do_search(
 	"https://ja.wikipedia.org/",
 	"https://ja.wikipedia.org/w/index.php?search=")'>
-<input class="_button" type="button" name="wikipediaEnButton" value="Wikipedia(en)" onClick='search(
+<input class="_button" type="button" name="wikipediaEnButton" value="Wikipedia(en)" onClick='do_search(
 	"https://en.wikipedia.org/",
 	"https://en.wikipedia.org/w/index.php?search=")'>
-<input class="_button" type="button" name="nicovideoDicButton" value="ニコニコ大百科" onClick='search(
+<input class="_button" type="button" name="nicovideoDicButton" value="ニコニコ大百科" onClick='do_search(
 	"http://dic.nicovideo.jp/",
 	"http://dic.nicovideo.jp/s/al/t/")'>
-<input class="_button" type="button" name="pixivDicButton" value="ピクシブ百科事典" onClick='search(
+<input class="_button" type="button" name="pixivDicButton" value="ピクシブ百科事典" onClick='do_search(
 	"http://dic.pixiv.net/",
 	"http://dic.pixiv.net/search?query=")'>
 <!--~~~~~~~~~~その他サイト~~~~~~~~~~-->
 <br>&#128250;<!--📺--><br>
-<input class="_button" type="button" name="youtubeButton" value="YouTube" onClick='search(
+<input class="_button" type="button" name="youtubeButton" value="YouTube" onClick='do_search(
 	"http://www.youtube.com/",
 	"http://www.youtube.com/results?search_query=")'>
-<input class="_button" type="button" name="nicovideoButton" value="ニコニコ動画" onClick='search(
+<input class="_button" type="button" name="nicovideoButton" value="ニコニコ動画" onClick='do_search(
 	"http://www.nicovideo.jp/",
 	"http://www.nicovideo.jp/search/")'>
-<input class="_button" type="button" name="nicovideoSeigaButton" value="ニコニコ静画" onClick='search(
+<input class="_button" type="button" name="nicovideoSeigaButton" value="ニコニコ静画" onClick='do_search(
 	"http://seiga.nicovideo.jp/",
 	"http://seiga.nicovideo.jp/search/")'>
-<!--<input class="_button" type="button" name="dailymotionButton" value="Dailymotion" onClick='search(
+<!--<input class="_button" type="button" name="dailymotionButton" value="Dailymotion" onClick='do_search(
 	"https://www.dailymotion.com/jp",
 	"https://www.dailymotion.com/search/")'>-->
-<!--<input class="_button" type="button" name="vimeoButton" value="Vimeo" onClick='search(
+<!--<input class="_button" type="button" name="vimeoButton" value="Vimeo" onClick='do_search(
 	"https://vimeo.com/jp/",
 	"https://vimeo.com/search?q=")'>-->
-<input class="_button" type="button" name="xButton" value="　𝕏　" onClick='search(
+<input class="_button" type="button" name="xButton" value="　𝕏　" onClick='do_search(
 	"https://x.com/",
 	"https://x.com/search?q=")'>
 <!--~~~~~~~~~~配達状況~~~~~~~~~~-->
 <br>&#128230;<!--📦--><br>
-<input class="_button" type="button" name="kuronekoyamatoButton" value="クロネコヤマト" onClick='search(
+<input class="_button" type="button" name="kuronekoyamatoButton" value="クロネコヤマト" onClick='do_search(
 	"https://cmypage.kuronekoyamato.co.jp/",
 	"http://jizen.kuronekoyamato.co.jp/jizen/servlet/crjz.b.NQ0010?id=")'>
-<input class="_button" type="button" name="japanpostButton" value="日本郵便" onClick='search(
+<input class="_button" type="button" name="japanpostButton" value="日本郵便" onClick='do_search(
 	"https://www.post.japanpost.jp/index.html",
 	"https://trackings.post.japanpost.jp/services/srv/search/direct?reqCodeNo1=")'>
-<input class="_button" type="button" name="sagawaButton" value="佐川急便" onClick='search(
+<input class="_button" type="button" name="sagawaButton" value="佐川急便" onClick='do_search(
 	"https://www.e-service.sagawa-exp.co.jp/",
 	"https://k2k.sagawa-exp.co.jp/p/web/okurijosearch.do?okurijoNo=")'>
 <!--~~~~~~~~~~検索はここまで~~~~~~~~~~-->
@@ -478,7 +478,7 @@ function do_clear(){
 /*==================================================================================================
 		各サイトでの検索
 */
-function search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = false){
+function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = false){
 	const txt = document.editForm.editTextarea.value;
 	var winName = document.editForm.searchNewTab.checked ? '_blank' : '_top';
 	const operation = document.editForm.operation.value;
