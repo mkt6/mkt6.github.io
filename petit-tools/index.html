@@ -252,10 +252,10 @@
 		行単位ボタン
 -->
 <br>行単位<br>
-<input class="_button" type="button" name="sortParaButton" value="行ソート" onClick='sortParagraphs()'>
-<input class="_button" type="button" name="addToParaButton" value="行頭と行末に追加" onClick='addToParagraphs()'>
-<input class="_button" type="button" name="openURLsButton" value="URLを開く" onClick='openURLs()'>
-<input class="_button" type="button" name="makeLinksButton" value="URLからリンクを作成" onClick='makeLinks()'>
+<input class="_button" type="button" name="sortParaButton" value="行ソート" onClick='do_sortParagraphs()'>
+<input class="_button" type="button" name="addToParaButton" value="行頭と行末に追加" onClick='do_addToParagraphs()'>
+<input class="_button" type="button" name="openURLsButton" value="URLを開く" onClick='do_openURLs()'>
+<input class="_button" type="button" name="makeLinksButton" value="URLからリンクを作成" onClick='do_makeLinks()'>
 <!-- trim系はFirefox 3.5の新機能(非標準) -->
 <input class="_button" type="button" name="trimParaLeftButton" value="行の前の空白を削除" onClick='trimParagraphsLeft()'>
 <input class="_button" type="button" name="trimParaRightButton" value="行の後ろの空白を削除" onClick='trimParagraphsRight()'>
@@ -463,7 +463,7 @@ function do_changeFontSize(delta){
 	document.editForm.editTextarea.style.fontSize = Math.max(9,size+delta)+'px';
 	
 	adjustEditTextareaHeight();
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
@@ -472,7 +472,7 @@ function do_changeFontSize(delta){
 function do_clear(){
 	setEditTextareaValue("");
 	document.getElementById('outputLabel').innerHTML = "";
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
@@ -531,7 +531,7 @@ function do_search(topUrlStr, urlPrefixStr, urlSuffixStr = '', escapeWord = fals
 */
 function do_countCharacters(){
 	window.alert(document.editForm.editTextarea.value.length.toString() + "文字です");
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
@@ -539,7 +539,7 @@ function do_countCharacters(){
 */
 function do_exeJavaScript(){
 	console.log(eval(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
@@ -550,7 +550,7 @@ function do_exeJavaScript(){
 */
 function do_lowerCase(){
 	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleLowerCase());
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
@@ -558,7 +558,7 @@ function do_lowerCase(){
 */
 function do_upperCase(){
 	setEditTextareaValue(document.editForm.editTextarea.value.toLocaleUpperCase());
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
@@ -566,32 +566,32 @@ function do_upperCase(){
 */
 function do_escape(){
 	setEditTextareaValue(escape(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_encodeURI(){
 	setEditTextareaValue(encodeURI(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_encodeURIComponent(){
 	setEditTextareaValue(encodeURIComponent(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_unescape(){
 	setEditTextareaValue(unescape(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_decodeURI(){
 	setEditTextareaValue(decodeURI(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 function do_decodeURIComponent(){
 	setEditTextareaValue(decodeURIComponent(document.editForm.editTextarea.value));
-	// フォーカスが外れているので戻しておく
+	// フォーカスが外れているので戻しておく。
 	document.editForm.editTextarea.focus();
 }
 /*==================================================================================================
@@ -600,7 +600,7 @@ function do_decodeURIComponent(){
 /*--------------------------------------------------
 	行ソート
 */
-function sortParagraphs(){
+function do_sortParagraphs(){
 	// 行単位で分割・ソート
 	var lineArray = document.editForm.editTextarea.value.split("\n");
 	lineArray.sort(function(a,b){
@@ -614,11 +614,14 @@ function sortParagraphs(){
 		}
 	}
 	setEditTextareaValue(setString);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	行頭と行末に追加
 */
-function addToParagraphs(){
+function do_addToParagraphs(){
 	// 行単位で分割
 	var lineArray = document.editForm.editTextarea.value.split("\n");
 	// 追加文字を設定
@@ -641,67 +644,61 @@ function addToParagraphs(){
 		setString += prefixString + lineArray[i] + suffixString;
 	}
 	setEditTextareaValue(setString);
+	
+	// フォーカスが外れているので戻しておく。
+	document.editForm.editTextarea.focus();
 }
 /*--------------------------------------------------
 	URLを開く
 */
-function openURLs(){
-	// 行単位で分割
+function do_openURLs(){
+	// 行単位で分割。空の場合[""]なのでゼロにはならないはず。
 	var lineArray = document.editForm.editTextarea.value.split("\n");
-	if( lineArray.length <= 0 ){
-		return;
-	}
-	// 各行を補正
-	var displayURL = ""; //ユーザ確認表示用文字列
-	for( var i=(lineArray.length - 1); 0 <= i; i-- ){
+	// 各行を補正。
+	var displayURL = "";//confirm表示用。
+	for(var i=(lineArray.length - 1); 0 <= i; i--){
 		if(lineArray[i].includes("://")){
-			// 5ch表記を修正
-			if( lineArray[i].indexOf("ttp:") == 0 ){
-				lineArray[i] = "h" + lineArray[i];
-			}else if( lineArray[i].indexOf("ttps:") == 0 ){
+			// 5ch表記を修正。
+			if(lineArray[i].indexOf("ttp:") == 0 || lineArray[i].indexOf("ttps:") == 0){
 				lineArray[i] = "h" + lineArray[i];
 			}
-			// URL表記にエンコード
-			// ※ encodeURIComponent() だと「:」や「/」までエンコードしてしまうのでencodeURI
-			lineArray[i] = encodeURI( lineArray[i] );
-			// displayURLに追加(逆順なので前に追加)
+			// URL表記にエンコード。encodeURIComponent()だと「:」や「/」までエンコードしてしまうのでencodeURI。
+			lineArray[i] = encodeURI(lineArray[i]);
+			// displayURLに追加。逆順にforしてるので前に追加。
 			displayURL = "•" + lineArray[i] + "\n" + displayURL;
-		}else{ //それ以外は省く
+		}else{//それ以外は省く
 			lineArray.splice(i,1);
 		}
 	}
 	// ユーザ確認
-	if( ! window.confirm( "以下の" + lineArray.length.toString() + "個のURLを開きますか？\n\n" + displayURL ) ){
-		// キャンセル後、フォーカスが外れているので戻しておく
+	if(lineArray.length <= 0 || !window.confirm("以下の" + lineArray.length.toString() + "個のURLを開きますか？\n\n" + displayURL)){
+		// キャンセル後、フォーカスが外れているので戻しておく。
 		document.editForm.editTextarea.focus();
 		return;
 	}
 	// 開く
-	for( var i=0; i < lineArray.length; i++ ){
-		window.open( lineArray[i], "_blank" );
+	for(var i=0; i < lineArray.length; i++){
+		window.open(lineArray[i],"_blank");
 	}
 }
 /*--------------------------------------------------
 	URLからリンクを作成
 */
-function makeLinks(){
+function do_makeLinks(){
 	var lineArray = document.editForm.editTextarea.value.split("\n");
-	var html = "";
-	for(var i=0; i<lineArray.length; i++){
+	var htmlStr = "";
+	for(var i=0; i < lineArray.length; i++){
 		if(lineArray[i].includes("://")){
 			// 5ch表記を修正
-			if( lineArray[i].indexOf("ttp:") == 0 ){
-				lineArray[i] = "h" + lineArray[i];
-			}else if( lineArray[i].indexOf("ttps:") == 0 ){
+			if(lineArray[i].indexOf("ttp:") == 0 || lineArray[i].indexOf("ttps:") == 0){
 				lineArray[i] = "h" + lineArray[i];
 			}
-			// URL表記にエンコード
-			// ※ encodeURIComponent() だと「:」や「/」までエンコードしてしまうのでencodeURI
-			lineArray[i] = encodeURI( lineArray[i] );
-			html += '<br><a href="' + lineArray[i] + '" target="_blank">' + lineArray[i] + '</a>';
+			// URL表記にエンコード。encodeURIComponent()だと「:」や「/」までエンコードしてしまうのでencodeURI。
+			lineArray[i] = encodeURI(lineArray[i]);
+			htmlStr += '<br><a href="' + lineArray[i] + '" target="_blank">' + lineArray[i] + '</a>';
 		}
 	}
-	document.getElementById('outputLabel').innerHTML = html;
+	setOutputHTML(htmlStr);
 }
 /*--------------------------------------------------
 	行の前の空白を削除
