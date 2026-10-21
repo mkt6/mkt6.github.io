@@ -49,14 +49,14 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		操作ボタン
 -->
-<input class="_button" type="button" name="pasteButton" value="ペースト" onClick='_paste()' tabindex="1">
-<input class="_button" type="button" name="copyButton" value="コピー" onClick='copySelection()' tabindex="1">
-<input class="_button" type="button" name="selectAllButton" value="すべてを選択" onClick='selectAll()' tabindex="1">
-<input class="_button" type="button" name="copyAllButton" value="すべてをコピー" onClick='copyAll()' tabindex="1">
-<input class="_button" type="button" name="plusButton" value="＋" onClick='changeFontSize(1)' tabindex="1">
-<input class="_button" type="button" name="minusButton" value="－" onClick='changeFontSize(-1)' tabindex="1">
+<input class="_button" type="button" name="pasteButton" value="ペースト" onClick='do_paste()' tabindex="1">
+<input class="_button" type="button" name="copyButton" value="コピー" onClick='do_copy()' tabindex="1">
+<input class="_button" type="button" name="selectAllButton" value="すべてを選択" onClick='do_selectAll()' tabindex="1">
+<input class="_button" type="button" name="copyAllButton" value="すべてをコピー" onClick='do_copyAll()' tabindex="1">
+<input class="_button" type="button" name="plusButton" value="＋" onClick='do_changeFontSize(1)' tabindex="1">
+<input class="_button" type="button" name="minusButton" value="－" onClick='do_changeFontSize(-1)' tabindex="1">
 <label id="editButtonsSpace">　</label>
-<input class="_button" type="button" name="clearButton" value="クリア" onClick='clearAll()' tabindex="1">
+<input class="_button" type="button" name="clearButton" value="クリア" onClick='do_clear()' tabindex="1">
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		テキストエリア
 
@@ -429,49 +429,49 @@ function handle_load(event){
 		操作
 */
 /*--------------------------------------------------
+	ペースト
+*/
+function do_paste(){
+	document.editForm.editTextarea.focus();
+	document.execCommand('paste');
+}
+/*--------------------------------------------------
 	選択範囲をコピー
 */
-function copySelection(){
+function do_copy(){
 	document.editForm.editTextarea.focus();
 	document.execCommand('copy');
 }
 /*--------------------------------------------------
 	全てを選択
 */
-function selectAll(){
+function do_selectAll(){
 	document.editForm.editTextarea.select();
 }
 /*--------------------------------------------------
 	全てを選択しコピー
 */
-function copyAll(){
-	selectAll();
-	copySelection();
-}
-/*--------------------------------------------------
-	ペースト
-*/
-function _paste(){
-	document.editForm.editTextarea.focus();
-	document.execCommand('paste');
-}
-/*--------------------------------------------------
-	クリア
-*/
-function clearAll(){
-	setEditTextareaValue("");
-	document.getElementById('outputLabel').innerHTML = "";
-	// フォーカスが外れているので戻しておく
-	document.editForm.editTextarea.focus();
+function do_copyAll(){
+	do_selectAll();
+	do_copy();
 }
 /*--------------------------------------------------
 	テキストサイズの増減。
 */
-function changeFontSize(delta){
+function do_changeFontSize(delta){
 	const size = parseInt(getComputedStyle(document.editForm.editTextarea).fontSize);
 	document.editForm.editTextarea.style.fontSize = Math.max(9,size+delta)+'px';
 	
 	adjustEditTextareaHeight();
+	// フォーカスが外れているので戻しておく
+	document.editForm.editTextarea.focus();
+}
+/*--------------------------------------------------
+	クリア
+*/
+function do_clear(){
+	setEditTextareaValue("");
+	document.getElementById('outputLabel').innerHTML = "";
 	// フォーカスが外れているので戻しておく
 	document.editForm.editTextarea.focus();
 }
